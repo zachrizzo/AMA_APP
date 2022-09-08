@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "full_app_for_AMA",
-    "slug": "full_app_for_AMA",
-    "version": "1.0.0",
+    "name": "American Medical Associates",
+    "slug": "American_Medical_Associates",
+    "version": "1.10.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.americanmedicalassociatesaz"
     },
     "android": {
       "adaptiveIcon": {
