@@ -40,7 +40,7 @@ const MISscreen = () => {
   const [addOns, setAddOns] = useState("Electrolyte");
   const [addOnsList, setAddOnsList] = useState([]);
   const [addOnsObject, setAddOnsObject] = useState(null);
-  const [vitaminInjections, setVitaminInjections] = useState("B12");
+  const [vitaminInjections, setVitaminInjections] = useState("B Complex");
   const [injectionsList, setInjectionsList] = useState([]);
   const [injectionsObject, setInjectionsObject] = useState(null);
   const [visitNumber, setVisitNumber] = useState(null);
@@ -86,7 +86,7 @@ const MISscreen = () => {
   const dob = useSelector(selectPatientDOB);
   const dispatch = useDispatch();
 
-  const [timePatientWasSeen, setTimePatientWasSeen] = useState(null);
+  const [timePatientWasSeen, setTimePatientWasSeen] = useState("9:00AM");
 
   const amaProvider = () => {
     if (typeOfRefural == "AMA Provider") {
@@ -129,7 +129,7 @@ const MISscreen = () => {
     var total = 0;
     if (totalList.length > 0) {
       totalList.forEach((item) => {
-        total = total + item.price;
+        total = total + item;
         console.log(total);
       });
       //find total aftrer discount percentage
@@ -139,6 +139,7 @@ const MISscreen = () => {
       setTotalBeforeDiscount(total);
       setTotal(totalAfterDiscount);
     } else {
+      setTotalBeforeDiscount(0);
       setTotal(0);
       total = 0;
     }
@@ -152,6 +153,8 @@ const MISscreen = () => {
     >
       <View style={{ alignItems: "center" }}>
         <FlatList
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
           data={[true]}
           renderItem={({ item, index }) => {
             return (
@@ -313,6 +316,10 @@ const MISscreen = () => {
                       label="Mini Myers Cocktail"
                       value="Mini Myers Cocktail"
                     />,
+                    <Picker.Item
+                      label="1L Mini Myers Cocktail"
+                      value="1L Mini Myers Cocktail"
+                    />,
                     <Picker.Item label="1L Saline" value="1L Saline" />,
                     <Picker.Item label="AMA 1L Saline" value="AMA 1L Saline" />,
                     <Picker.Item label="500ml Saline" value="500ml Saline" />,
@@ -326,6 +333,7 @@ const MISscreen = () => {
                     <Picker.Item label="Vitamin C-5G" value="Vitamin C-5G" />,
                     <Picker.Item label="High Dose C" value="High Dose C" />,
                   ]}
+                  setPickedList={setIvBagList}
                   selectedValue={typeOfIV}
                   setPickerState={setTypeOfIV}
                   refresh={refresh}
@@ -347,13 +355,14 @@ const MISscreen = () => {
                     <Picker.Item label="Vitamin C" value="Vitamin C" />,
                     <Picker.Item label="Glutathione" value="Glutathione" />,
                     <Picker.Item label="B Complex" value="B Complex" />,
-                    <Picker.Item label="B12" value="B12" />,
+                    <Picker.Item label="B12 Add-On" value="B12 Add-On" />,
                     <Picker.Item label="4MG Zofran" value="4MG Zofran" />,
                     <Picker.Item
                       label="AMA 4MG Zofran"
                       value="AMA 4MG Zofran"
                     />,
                   ]}
+                  setPickedList={setAddOnsList}
                   selectedValue={addOns}
                   setPickerState={setAddOns}
                   refresh={refresh}
@@ -367,13 +376,14 @@ const MISscreen = () => {
                   titleOfList={"Injections"}
                   pickerItems={[
                     <Picker.Item label="B Complex" value="B Complex" />,
-                    <Picker.Item label="B12" value="B12" />,
+                    <Picker.Item label="B-12" value="B-12" />,
                     <Picker.Item label="MIC-B12" value="MIC-B12" />,
                     <Picker.Item label="Vitamin D" value="Vitamin D" />,
                     <Picker.Item label="MIC JAGGER" value="MIC JAGGER" />,
                     <Picker.Item label="Extra 500ml" value="Extra 500ml" />,
                     <Picker.Item label="Extra 1L" value="Extra 1L" />,
                   ]}
+                  setPickedList={setInjectionsList}
                   selectedValue={vitaminInjections}
                   setPickerState={setVitaminInjections}
                   refresh={refresh}
@@ -400,6 +410,7 @@ const MISscreen = () => {
                       value="Myers + Booster"
                     />,
                   ]}
+                  setPickedList={setBoosterList}
                   selectedValue={booster}
                   setPickerState={setBooster}
                   refresh={refresh}
@@ -547,6 +558,7 @@ const MISscreen = () => {
                     <Picker.Item label="Mocktini Tub" value="Mocktini Tub" />,
                     <Picker.Item label="Sarcotropin" value="Sarcotropin" />,
                   ]}
+                  setPickedList={setUlitmaList}
                   selectedValue={ulitma}
                   setPickerState={setUlitma}
                   refresh={refresh}
@@ -562,6 +574,7 @@ const MISscreen = () => {
                     <Picker.Item label="1 Scans" value="1 Scans" />,
                     <Picker.Item label="3 Scans" value="3 Scans" />,
                   ]}
+                  setPickedList={setStykuList}
                   selectedValue={styku}
                   setPickerState={setStyku}
                   refresh={refresh}
@@ -584,6 +597,7 @@ const MISscreen = () => {
                       value="Other Phlebotomy"
                     />,
                   ]}
+                  setPickedList={setPhlebotomyList}
                   selectedValue={Phlebotomy}
                   setPickerState={setPhlebotomy}
                   refresh={refresh}
@@ -644,12 +658,11 @@ const MISscreen = () => {
                   text={"Add MIS"}
                   onPress={() => {
                     //add mis to db
-                    if (
-                      totalList.length > 0 &&
-                      total > 0 &&
-                      totalBeforeDiscount > 0 &&
-                      firstName != null &&
-                      lastName != null &&
+                    if (firstName == null && lastName == null) {
+                      alert("Please select a patient");
+                    } else if (totalList.length == 0) {
+                      alert("Please select a service");
+                    } else if (
                       visitNumber != null &&
                       timePatientWasSeen != null
                     ) {
@@ -675,26 +688,28 @@ const MISscreen = () => {
                         totalBeforeDiscount: totalBeforeDiscount,
                         timePatientWasSeen: timePatientWasSeen,
                       }).then(() => {
-                        ivBagList = [];
-                        providerRefural = null;
-                        injectionsList = [];
-                        firstName = null;
-                        lastName = null;
-                        dob = null;
-                        typeOfRefural = null;
-                        typeOfAppoinment = null;
-                        addOnsList = [];
-                        ulitmaList = [];
-                        discount = 0;
-                        paymentMethod = null;
-                        visitNumber = null;
-                        boosterList = [];
-                        typeOfPatient = null;
-                        total = 0;
-                        stykuList = [];
-                        PhlebotomyList = [];
-                        totalBeforeDiscount = 0;
-                        timePatientWasSeen = null;
+                        setIvBagList([]);
+                        setProviderRefural(null);
+                        setInjectionsList([]);
+                        setTotalList([]);
+                        setTypeOfRefural(null);
+                        setTypeOfAppoinment(null);
+                        setAddOnsList([]);
+                        setUlitmaList([]);
+                        setDiscount(0);
+                        setPaymentMethod(null);
+                        setVisitNumber(null);
+                        setBoosterList([]);
+                        setTypeOfPatient(null);
+                        setTotal(0);
+                        setStykuList([]);
+                        setPhlebotomyList([]);
+                        setTotalBeforeDiscount(0);
+                        setTimePatientWasSeen(null);
+
+                        dispatch(setPatientDOB(null));
+                        dispatch(setPatientFirstName(""));
+                        dispatch(setPatientLastName(""));
                         setRefresh(!refresh);
                         alert("MIS Added");
                       });

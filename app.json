@@ -2,7 +2,7 @@
   "expo": {
     "name": "American Medical Associates",
     "slug": "American_Medical_Associates",
-    "version": "1.10.1",
+    "version": "1.10.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,7 +11,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/bad11e83-7587-4cbb-8b9c-01b65156c06b"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -28,6 +29,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

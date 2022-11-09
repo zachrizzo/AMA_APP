@@ -10,6 +10,8 @@ export const globalSlice = createSlice({
     patientFirstName: null,
     patientLastName: null,
     patientDOB: null,
+    selectedProduct: null,
+    allPatientInfo: null,
   },
   reducers: {
     setCompany: (state, action) => {
@@ -33,6 +35,12 @@ export const globalSlice = createSlice({
     setPatientDOB: (state, action) => {
       state.patientDOB = action.payload;
     },
+    setSelectedProduct: (state, action) => {
+      state.selectedProduct = action.payload;
+    },
+    setAllPatientInfo: (state, action) => {
+      state.allPatientInfo = action.payload;
+    },
   },
 });
 
@@ -44,6 +52,8 @@ export const {
   setPatientFirstName,
   setPatientLastName,
   setPatientDOB,
+  setSelectedProduct,
+  setAllPatientInfo,
 } = globalSlice.actions;
 export const selectCompany = (state) => state.global.company;
 export const selectDate = (state) => state.global.date;
@@ -52,4 +62,6 @@ export const selectTaskID = (state) => state.global.taskID;
 export const selectPatientFirstName = (state) => state.global.patientFirstName;
 export const selectPatientLastName = (state) => state.global.patientLastName;
 export const selectPatientDOB = (state) => state.global.patientDOB;
+export const selectSelectedProduct = (state) => state.global.selectedProduct;
+export const selectAllPatientInfo = (state) => state.global.allPatientInfo;
 export default globalSlice.reducer;

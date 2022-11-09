@@ -16,6 +16,9 @@ import HomeScreenPhone from "./screens/HomeScreenPhone";
 import BarcodeScreeenPhone from "./screens/BarcodeScreeenPhone";
 import MISscreen from "./screens/MISscreen";
 import TodoTaskPage from "./screens/ToDoTaskScreen";
+import InventoryItemEdit from "./screens/InventoryItemEdit";
+import Patients from "./screens/PatientsScreen";
+import Checkout from "./screens/Checkout";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const golbalScreenOptions = {
@@ -58,6 +61,12 @@ const StackNavigator = () => {
         <Stack.Screen name="Home Drawer" component={DrawerNavigator} />
         <Stack.Screen name="Sign Up Screen" component={SignUp} />
         <Stack.Screen
+          name="Inventory Edit Screen"
+          options={{ headerShown: true }}
+          component={InventoryItemEdit}
+        />
+
+        <Stack.Screen
           name="ToDo Screen"
           options={{ headerShown: true }}
           component={TodoTaskPage}
@@ -81,6 +90,8 @@ function DrawerNavigator() {
       {ShowPhoneVersionBarcode()}
       <Drawer.Screen name="Add Item" component={ManualItemEntryScreen} />
       <Drawer.Screen name="MIS" component={MISscreen} />
+      <Drawer.Screen name="Patients" component={Patients} />
+      <Drawer.Screen name="Checkout" component={Checkout} />
     </Drawer.Navigator>
   );
 }

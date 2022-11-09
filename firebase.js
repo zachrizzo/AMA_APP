@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFunctions } from "firebase/functions";
 import { getAuth } from "firebase/auth";
-import { getFirestore, where } from "firebase/firestore";
+import { deleteField, getDoc, getFirestore, where } from "firebase/firestore";
 import {
   arrayUnion,
   deleteDoc,
@@ -58,10 +58,11 @@ export async function AddNewItemToDbManualy({
       doc(db, "companys", selectedCompany, ItemType, data),
       {
         barcode: barcode,
+        ItemType: ItemType,
         id: barcode,
         product: itemName,
         quantity: quanitiy,
-        decription: description,
+        description: description,
         company: selectedCompany,
         timestamp: serverTimestamp(),
         itemLocation: location,
@@ -89,6 +90,8 @@ export async function AddNewItemToDbManualy({
             // id: data,
             // product: name,
             year: year,
+            ItemType: ItemType,
+            company: selectedCompany,
             timestamp: serverTimestamp(),
             quantity: quanitiy,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
@@ -115,6 +118,8 @@ export async function AddNewItemToDbManualy({
             // id: data,
             // product: name,
             month: month,
+            ItemType: ItemType,
+            company: selectedCompany,
             timestamp: serverTimestamp(),
             quantity: quanitiy,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
@@ -143,6 +148,7 @@ export async function AddNewItemToDbManualy({
             // id: data,
             // product: name,
             day: day,
+            company: selectedCompany,
             timestamp: serverTimestamp(),
             quantity: quanitiy,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
@@ -180,8 +186,9 @@ export async function AddNewItemToDbManualy({
               id: data,
               product: itemName,
               quantity: quanitiy,
-              decription: description,
+              description: description,
               company: selectedCompany,
+              ItemType: ItemType,
 
               itemLocation: location,
               lastPersonToScan: auth.currentUser.email,
@@ -333,7 +340,7 @@ export async function addExisitingItemToDb({
             id: data,
             product: itemName,
             quantity: quanitiy,
-            decription: description,
+            description: description,
             company: selectedCompany,
             timestamp: serverTimestamp(),
             itemLocation: location,
@@ -373,8 +380,9 @@ export async function AddNewItemToDb({
         id: barcode,
         product: itemName,
         quantity: quanitiy,
-        decription: description,
+        description: description,
         company: selectedCompany,
+        ItemType: ItemType,
         timestamp: serverTimestamp(),
         itemLocation: location,
         lastPersonToScan: auth.currentUser.email,
@@ -401,6 +409,8 @@ export async function AddNewItemToDb({
             // id: data,
             // product: name,
             year: year,
+            company: selectedCompany,
+            ItemType: ItemType,
             timestamp: serverTimestamp(),
             quantity: 1,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
@@ -427,7 +437,9 @@ export async function AddNewItemToDb({
             // id: data,
             // product: name,
             month: month,
+            company: selectedCompany,
             timestamp: serverTimestamp(),
+            ItemType: ItemType,
             quantity: 1,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
           },
@@ -455,6 +467,8 @@ export async function AddNewItemToDb({
             // id: data,
             // product: name,
             day: day,
+            company: selectedCompany,
+            ItemType: ItemType,
             timestamp: serverTimestamp(),
             quantity: 1,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
@@ -491,8 +505,10 @@ export async function AddNewItemToDb({
             id: data,
             product: itemName,
             quantity: quanitiy,
-            decription: description,
             company: selectedCompany,
+            description: description,
+            company: selectedCompany,
+            ItemType: ItemType,
 
             itemLocation: location,
             lastPersonToScan: auth.currentUser.email,
@@ -635,7 +651,7 @@ export async function UseExistingItemOnDb({
             id: barcode,
             product: itemName,
             quantity: quanitiy,
-            decription: description,
+            description: description,
             company: selectedCompany,
 
             itemLocation: location,
@@ -1152,7 +1168,7 @@ export const addMIS = async ({
 }) => {
   try {
     await setDoc(
-      doc(db, "companys", "Vitalize Infusion", "MIS", visitId.toString()),
+      doc(db, "companys", "Vitalize Nation", "MIS", visitId.toString()),
       {
         // type_of_barcode: type,
         // barcode: data,
@@ -1195,7 +1211,7 @@ export function patientSearchList({ patientArray, company }) {
   try {
     onSnapshot(
       query(
-        collection(db, "companys", company, "patients")
+        collection(db, "companys", "Vitalize Nation", "patients")
         // where('fullName', '>=', searchName)
       ),
 
@@ -1236,6 +1252,95 @@ export async function addNewPatient({
       DOB: DOB,
       address: address,
       dateAdded: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+export async function addGiftCardToPatient({
+  email,
+  company,
+  giftCardNumber,
+  totalOnGiftCard,
+  currentAmountOnGiftCard,
+}) {
+  await setDoc(
+    doc(db, "companys", company, "patients", email),
+    {
+      dateGiftCardWasAdded: serverTimestamp(),
+      giftCardNumber: giftCardNumber,
+      totalOnGiftCard: totalOnGiftCard,
+      currentAmountOnGiftCard: currentAmountOnGiftCard,
+    },
+    { merge: true }
+  );
+}
+//remove gift card from patient
+export async function removeGiftCardFromPatient({ email, company }) {
+  await setDoc(
+    doc(db, "companys", company, "patients", email),
+    {
+      giftCardNumber: deleteField(),
+      totalOnGiftCard: deleteField(),
+      currentAmountOnGiftCard: deleteField(),
+      dateGiftCardWasAdded: deleteField(),
+    },
+    { merge: true }
+  );
+}
+//get one patient
+export function getOnePatient({ patientArray, email, company }) {
+  try {
+    getDoc(doc(db, "companys", company, "patients", email)).then((doc) => {
+      if (doc.exists()) {
+        patientArray(doc.data());
+      } else {
+        patientArray("no such document");
+      }
+    });
+  } catch (e) {
+    e;
+  }
+}
+// search patient by gift card number
+export function searchPatientByGiftCardNumber({
+  patientArray,
+  giftCardNumber,
+  company,
+}) {
+  try {
+    onSnapshot(
+      query(
+        collection(db, "companys", company, "patients"),
+        where("giftCardNumber", "==", giftCardNumber)
+      ),
+      (querySnapshot) => {
+        const quantitysnap = [];
+
+        querySnapshot.forEach((snap) => {
+          quantitysnap.push(snap.data());
+
+          // key: snap.id;
+        });
+        patientArray(quantitysnap);
+
+        // console.log(' fireeee x  ' + quantitysnap)
+      }
+    );
+  } catch (e) {
+    e;
+  }
+}
+//useGiftCard
+export async function useAmountGiftCard({
+  email,
+  company,
+  currentAmountOnGiftCard,
+  amountToUse,
+}) {
+  await setDoc(
+    doc(db, "companys", company, "patients", email),
+    {
+      currentAmountOnGiftCard: amountToUse,
     },
     { merge: true }
   );

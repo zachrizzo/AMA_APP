@@ -13,13 +13,14 @@ import {
   setPatientDOB,
   setPatientFirstName,
   setPatientLastName,
+  setAllPatientInfo,
 } from "../slices/globalSlice";
 import { patientSearchList, addNewPatient } from "../firebase";
 import MainButton from "./MainButton";
 import { Octicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-const PatientSearch = ({}) => {
+const PatientSearch = ({ globalRefresh }) => {
   const [showAddNewUser, setShowAddNewUser] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [searchDob, setSearchDob] = useState("");
@@ -33,19 +34,21 @@ const PatientSearch = ({}) => {
   const [searched, setSearched] = useState(null);
   const dispatch = useDispatch();
   const company = useSelector(selectCompany);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     patientSearchList({
       patientArray: setPatientListArray,
       company: company,
     });
-  }, []);
+  }, [globalRefresh]);
   useEffect(() => {
     var searchedPatient = [];
-    if (searchName != null || searchDob != null) {
+    if (searchName != "" || searchDob != "") {
       patientListArray.map((item) => {
         const fullName = JSON.stringify(item.fullName);
         const DOB = JSON.stringify(item.DOB);
+        setRefresh(!refresh);
         // if (applicationSearch.length > 1) {
         if (
           fullName.toLowerCase().includes(searchName.toLowerCase()) == true &&
@@ -61,7 +64,7 @@ const PatientSearch = ({}) => {
       searchedPatient = [];
       setSearched(null);
     }
-  }, [searchDob, searchName]);
+  }, [searchName, searchDob]);
 
   const addNewUser = () => {
     if (showAddNewUser == false) {
@@ -107,7 +110,10 @@ const PatientSearch = ({}) => {
               color={"#0008ff"}
               placeholder={"DOB"}
               value={searchDob}
-              onChangeText={(text) => setSearchDob(text)}
+              onChangeText={(text) => {
+                var textClean = text.replace(/[^0-9]/g, "");
+                setSearchDob(text.replace(/[^0-9]/g, ""));
+              }}
             />
           </View>
           {searched != null && searchName != null && (
@@ -147,9 +153,10 @@ const PatientSearch = ({}) => {
                           );
                           dispatch(setPatientFirstName(item.firstName));
                           dispatch(setPatientLastName(item.lastName));
-                          setSearched(null);
-                          setSearchName(null);
-                          setSearchDob(null);
+                          dispatch(setAllPatientInfo(item));
+                          setSearched([]);
+                          setSearchName("");
+                          setSearchDob("");
                         }}
                       >
                         <Text style={{ textAlign: "center", fontSize: 18 }}>

@@ -45,6 +45,8 @@ import {
 } from "../firebase";
 import DividerLine from "./DividerLine";
 import { useNavigation } from "@react-navigation/native";
+import { setSelectedProduct } from "../slices/globalSlice";
+import { useDispatch } from "react-redux";
 
 export default function ListItemExpand({
   item,
@@ -73,13 +75,29 @@ export default function ListItemExpand({
   var year = currentDate.getFullYear();
   var month = currentDate.getMonth() + 1;
   var day = currentDate.getDate();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   return (
     <Animated.View style={{ transform: [{ scale }], opacity }}>
       <TouchableOpacity
-        onLongPress={() => {
-          navigation.navigate("inventoryItemEdit", { item: item });
+        onLongPress={async () => {
+          const addToRedux = () => {
+            dispatch(
+              setSelectedProduct({
+                product: item.product,
+                barcode: item.barcode,
+                description: item.description,
+                location: item.itemLocation,
+                quantity: item.quantity,
+                company: item.company,
+                type: item.ItemType,
+              })
+            );
+            Promise.resolve(navigation.navigate("Inventory Edit Screen"));
+          };
+          addToRedux();
+          //navigation.navigate("Inventory Edit Screen");
         }}
         onPress={() => {
           if (showDetails == true) {
@@ -102,6 +120,7 @@ export default function ListItemExpand({
                 console.log("this is doc data:", productDetails);
             }
           );
+          // alert(JSON.stringify(item));
 
           if (showAdded == true) {
             try {
@@ -277,7 +296,7 @@ export default function ListItemExpand({
                         textAlign: "center",
                       }}
                     >
-                      Decription: {item.decription}
+                      description: {item.description}
                     </Text>
                     <Text style={{ textAlign: "center", color: "#757575" }}>
                       Location: {item.itemLocation}

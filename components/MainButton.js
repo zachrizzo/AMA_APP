@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-export default function MainButton({ text, onPress, buttonWidth }) {
+export default function MainButton({
+  buttonColor,
+  text,
+  onPress,
+  buttonWidth,
+}) {
+  const [defaultButtonColor, setDefaultButtonColor] = useState("#0008ff");
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -9,7 +16,7 @@ export default function MainButton({ text, onPress, buttonWidth }) {
           borderRadius: 40,
           paddingVertical: 14,
           paddingHorizontal: 20,
-          backgroundColor: "#0008ff",
+          backgroundColor: buttonColor ? buttonColor : defaultButtonColor,
           alignSelf: "center",
           marginTop: 12,
           height: 50,
