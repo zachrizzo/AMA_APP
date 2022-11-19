@@ -1146,7 +1146,7 @@ export const addMIS = async ({
   day,
   firstName,
   lastName,
-
+  email,
   typeOfAppointment,
   typeofReferral,
   typeOfPatient,
@@ -1186,7 +1186,7 @@ export const addMIS = async ({
         firstName: firstName,
         lastName: lastName,
         visitId: visitId,
-
+        email: email,
         providerReferral: providerRefural,
         timestamp: serverTimestamp(),
         whoSubmitted: auth.currentUser.email,
@@ -1202,7 +1202,28 @@ export const addMIS = async ({
         timePatientWasSeen: timePatientWasSeen,
       },
       { merge: true }
-    );
+    ).then(() => {
+      //add visit Info to Patient
+      setDoc(
+        doc(
+          db,
+          "companys",
+          "Vitalize Nation",
+          "patients",
+          email,
+          "visits",
+          visitId.toString()
+        ),
+        {
+          visitId: visitId.toString(),
+          timestamp: serverTimestamp(),
+          whoSubmitted: auth.currentUser.email,
+          total: total,
+          timePatientWasSeen: timePatientWasSeen,
+        },
+        { merge: true }
+      );
+    });
   } catch (e) {
     alert(e);
   }

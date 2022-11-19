@@ -19,13 +19,14 @@ import PatientSearch from "../components/PatientSearch";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectPatientDOB,
+  selectPatientEmail,
   selectPatientFirstName,
   selectPatientLastName,
   setPatientDOB,
   setPatientFirstName,
   setPatientLastName,
 } from "../slices/globalSlice";
-import DatePicker from "@react-native-community/datetimepicker";
+// import DatePicker from "@react-native-community/datetimepicker";
 
 const MISscreen = () => {
   //const [dob, setDob] = useState(null);
@@ -64,26 +65,20 @@ const MISscreen = () => {
   const [PhlebotomyList, setPhlebotomyList] = useState([]);
   const [PhlebotomyObject, setPhlebotomyObject] = useState(null);
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState(0);
+  const [amaVitamins, setAmaVitamins] = useState("Myers AMA Vitamins");
+  const [amaVitaminsList, setAmaVitaminsList] = useState([]);
+  const [amaVitaminsObject, setAmaVitaminsObject] = useState(null);
+  const [virtueRF, setVirtueRF] = useState("Buccal");
+  const [virtueRFList, setVirtueRFList] = useState([]);
+  const [virtueRFObject, setVirtueRFObject] = useState(null);
+  const [splendorX, setSplendorX] = useState("Vascular Treatment");
+  const [splendorXList, setSplendorXList] = useState([]);
+  const [splendorXObject, setSplendorXObject] = useState(null);
 
-  const MyersCocktailPrice = 150;
-  const ForeverYoungPrice = 200;
-  const MyersPlusPrice = 250;
-  const Glutathoineprice = 50;
-  const NADprice = 50;
-  const VitaminCInfusionPrice = 50;
-  const VitaminC5GPrice = 50;
-  const HighDoseVitaminCPrice = 50;
-  const MyersCocktailAddOnsPrice = 50;
-  const ElectrolytePrice = 25;
-  const VitaminCPrice = 25;
-  const GlutathioneadonsPrice = 25;
-  const BComplexPrice = 25;
-  const B12Price = 25;
-  const GlutathioneBoosterPrice = 25;
-  const WatermelonPacketPrice = 25;
   const firstName = useSelector(selectPatientFirstName);
   const lastName = useSelector(selectPatientLastName);
   const dob = useSelector(selectPatientDOB);
+  const email = useSelector(selectPatientEmail);
   const dispatch = useDispatch();
 
   const [timePatientWasSeen, setTimePatientWasSeen] = useState("9:00AM");
@@ -119,10 +114,13 @@ const MISscreen = () => {
     //create random visit number
     const visitNumber = Math.floor(Math.random() * 1000000000000000);
     setVisitNumber(visitNumber);
+    return () => {
+      undefined;
+    };
   }, [refresh]);
-  useEffect(() => {
-    console.log(firstNames);
-  }, [firstNames]);
+  // useEffect(() => {
+  //   console.log(firstNames);
+  // }, [firstNames]);
   useEffect(() => {
     //get total by adding up all in toal list
 
@@ -143,6 +141,9 @@ const MISscreen = () => {
       setTotal(0);
       total = 0;
     }
+    return () => {
+      undefined;
+    };
   }, [totalList, refresh, discount]);
 
   return (
@@ -345,6 +346,42 @@ const MISscreen = () => {
                   object={ivBagObject}
                   listKeyNumber={1}
                 />
+
+                {ivBagList.find((element) => {
+                  if (element.product == "AMA 1L Saline") {
+                    return true;
+                  }
+                }) && (
+                  <MISListItem
+                    titleOfList={"AMA Vitamins"}
+                    pickerItems={[
+                      <Picker.Item
+                        label="Myers AMA Vitamins"
+                        value="Myers AMA Vitamins"
+                      />,
+                      <Picker.Item
+                        label="Myers + AMA Vitamins"
+                        value="Myers + AMA Vitamins"
+                      />,
+                      <Picker.Item
+                        label="Glutathione AMA Vitamins"
+                        value="Glutathione AMA Vitamins"
+                      />,
+                    ]}
+                    setPickedList={setAmaVitaminsList}
+                    selectedValue={amaVitamins}
+                    setPickerState={setAmaVitamins}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    pickedList={amaVitaminsList}
+                    pickerValue={amaVitamins}
+                    totalList={totalList}
+                    setObject={setAmaVitaminsObject}
+                    object={amaVitaminsObject}
+                    listKeyNumber={2}
+                  />
+                )}
+
                 <MISListItem
                   titleOfList={"Add Ons"}
                   pickerItems={[
@@ -370,7 +407,7 @@ const MISscreen = () => {
                   pickedList={addOnsList}
                   pickerValue={addOns}
                   totalList={totalList}
-                  listKeyNumber={2}
+                  listKeyNumber={3}
                 />
                 <MISListItem
                   titleOfList={"Injections"}
@@ -391,7 +428,7 @@ const MISscreen = () => {
                   pickedList={injectionsList}
                   pickerValue={vitaminInjections}
                   totalList={totalList}
-                  listKeyNumber={3}
+                  listKeyNumber={4}
                 />
                 <MISListItem
                   titleOfList={"boosters"}
@@ -418,7 +455,7 @@ const MISscreen = () => {
                   pickedList={boosterList}
                   pickerValue={booster}
                   totalList={totalList}
-                  listKeyNumber={4}
+                  listKeyNumber={5}
                 />
                 <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
                   Payment Type
@@ -566,7 +603,7 @@ const MISscreen = () => {
                   pickedList={ulitmaList}
                   pickerValue={ulitma}
                   totalList={totalList}
-                  listKeyNumber={5}
+                  listKeyNumber={6}
                 />
                 <MISListItem
                   titleOfList={"Styku"}
@@ -582,7 +619,7 @@ const MISscreen = () => {
                   pickedList={stykuList}
                   pickerValue={styku}
                   totalList={totalList}
-                  listKeyNumber={6}
+                  listKeyNumber={7}
                 />
                 <MISListItem
                   titleOfList={"Phlebotomy"}
@@ -605,7 +642,199 @@ const MISscreen = () => {
                   pickedList={PhlebotomyList}
                   pickerValue={Phlebotomy}
                   totalList={totalList}
-                  listKeyNumber={7}
+                  listKeyNumber={8}
+                />
+                <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
+                  MedSpa
+                </Text>
+                <DividerLine
+                  lineWidth={Dimensions.get("screen").width / 1.2}
+                  lineColor={"#34B417"}
+                />
+                <MISListItem
+                  titleOfList={"Splendor X"}
+                  pickerItems={[
+                    <Picker.Item
+                      label="Vascular Treatment"
+                      value="Vascular Treatment"
+                    />,
+                    <Picker.Item
+                      label="Vascular Treatment package of 6"
+                      value="Vascular Treatment package of 6"
+                    />,
+                    <Picker.Item
+                      label="Pigment Treatment"
+                      value="Pigment Treatment"
+                    />,
+                    <Picker.Item
+                      label="Pigment Treatment package of 6"
+                      value="Pigment Treatment package of 6"
+                    />,
+                    <Picker.Item label="Laser Facial" value="Laser Facial" />,
+                    <Picker.Item
+                      label="Laser Facial package of 6"
+                      value="Laser Facial package of 6"
+                    />,
+                    <Picker.Item
+                      label="Extra Small Area"
+                      value="Extra Small Area"
+                    />,
+                    <Picker.Item
+                      label="Extra Small Area package of 6"
+                      value="Extra Small Area package of 6"
+                    />,
+                    <Picker.Item label="Small Area" value="Small Area" />,
+                    <Picker.Item
+                      label="Small Area package of 6"
+                      value="Small Area package of 6"
+                    />,
+                    <Picker.Item label="Medium Area" value="Medium Area" />,
+                    <Picker.Item
+                      label="Medium Area package of 6"
+                      value="Medium Area package of 6"
+                    />,
+                    <Picker.Item label="Large Area" value="Large Area" />,
+                    <Picker.Item
+                      label="Large Area package of 6"
+                      value="Large Area package of 6"
+                    />,
+                    <Picker.Item
+                      label="Extra Large Area"
+                      value="Extra Large Area"
+                    />,
+                    <Picker.Item
+                      label="Extra Large Area package of 6"
+                      value="Extra Large Area package of 6"
+                    />,
+                    <Picker.Item label="Full Body" value="Full Body" />,
+                  ]}
+                  setPickedList={setSplendorXList}
+                  selectedValue={splendorX}
+                  setPickerState={setSplendorX}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  pickedList={splendorXList}
+                  pickerValue={splendorX}
+                  totalList={totalList}
+                  listKeyNumber={9}
+                />
+                <MISListItem
+                  titleOfList={"Virtue RF"}
+                  pickerItems={[
+                    <Picker.Item label="Buccal" value="Buccal" />,
+                    <Picker.Item
+                      label="Buccal package of 3"
+                      value="Buccal package of 3"
+                    />,
+                    <Picker.Item label="Submental" value="Submental" />,
+                    <Picker.Item
+                      label="Submental package of 3"
+                      value="Submental package of 3"
+                    />,
+                    <Picker.Item label="Arms" value="Arms" />,
+                    <Picker.Item
+                      label="Arms package of 3"
+                      value="Arms package of 3"
+                    />,
+                    <Picker.Item label="Abdomen" value="Abdomen" />,
+                    <Picker.Item
+                      label="Abdomen package of 3"
+                      value="Abdomen package of 3"
+                    />,
+                    <Picker.Item label="Scars" value="Scars" />,
+                    <Picker.Item
+                      label="Scars package of 3"
+                      value="Scars package of 3"
+                    />,
+                    <Picker.Item label="Buttocks" value="BucButtockscal" />,
+                    <Picker.Item
+                      label="Buttocks package of 3"
+                      value="Buttocks package of 3"
+                    />,
+                    <Picker.Item label="Stretch Marks" value="Stretch Marks" />,
+                    <Picker.Item
+                      label="Stretch Marks package of 3"
+                      value="Stretch Marks package of 3"
+                    />,
+                    <Picker.Item label="Thighs" value="Thighs" />,
+                    <Picker.Item
+                      label="Thighs package of 3"
+                      value="Thighs package of 3"
+                    />,
+                    <Picker.Item label="Face" value="Face" />,
+                    <Picker.Item
+                      label="Face package of 3"
+                      value="Face package of 3"
+                    />,
+                    <Picker.Item label="Face + Neck" value="Face + Neck" />,
+                    <Picker.Item
+                      label="Face + Neck package of 3"
+                      value="Face + Neck package of 3"
+                    />,
+                    <Picker.Item
+                      label="Face + Neck + Decollete"
+                      value="Face + Neck + Decollete"
+                    />,
+                    <Picker.Item
+                      label="Face + Neck + Decollete package of 3"
+                      value="Face + Neck + Decollete package of 3"
+                    />,
+                  ]}
+                  setPickedList={setVirtueRFList}
+                  selectedValue={virtueRF}
+                  setPickerState={setVirtueRF}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  pickedList={virtueRFList}
+                  pickerValue={virtueRF}
+                  totalList={totalList}
+                  listKeyNumber={10}
+                />
+                <MISListItem
+                  titleOfList={"PCA"}
+                  pickerItems={[
+                    <Picker.Item label="Lab Draw" value="Lab Draw" />,
+                    <Picker.Item
+                      label="Therapeutic Phlebotomy"
+                      value="Therapeutic Phlebotomy"
+                    />,
+                    <Picker.Item
+                      label="Other Phlebotomy"
+                      value="Other Phlebotomy"
+                    />,
+                  ]}
+                  setPickedList={setPhlebotomyList}
+                  selectedValue={Phlebotomy}
+                  setPickerState={setPhlebotomy}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  pickedList={PhlebotomyList}
+                  pickerValue={Phlebotomy}
+                  totalList={totalList}
+                  listKeyNumber={11}
+                />
+                <MISListItem
+                  titleOfList={"Phlebotomy"}
+                  pickerItems={[
+                    <Picker.Item label="Lab Draw" value="Lab Draw" />,
+                    <Picker.Item
+                      label="Therapeutic Phlebotomy"
+                      value="Therapeutic Phlebotomy"
+                    />,
+                    <Picker.Item
+                      label="Other Phlebotomy"
+                      value="Other Phlebotomy"
+                    />,
+                  ]}
+                  setPickedList={setPhlebotomyList}
+                  selectedValue={Phlebotomy}
+                  setPickerState={setPhlebotomy}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  pickedList={PhlebotomyList}
+                  pickerValue={Phlebotomy}
+                  totalList={totalList}
+                  listKeyNumber={12}
                 />
                 <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
                   Discount
@@ -673,6 +902,7 @@ const MISscreen = () => {
                         firstName: firstName,
                         lastName: lastName,
                         DOB: dob,
+                        email: email,
                         typeofReferral: typeOfRefural,
                         typeOfAppointment: typeOfAppoinment,
                         typeOfaddons: addOnsList,

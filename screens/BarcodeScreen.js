@@ -650,6 +650,7 @@ const BarcodeScreen = () => {
     try {
       if (selectedCompany !== null) {
         await setScanned(true);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         if (isEnabled3 == true) {
           if (addExisiting) {
             addExisitingItemToDb({

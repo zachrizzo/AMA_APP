@@ -14,6 +14,7 @@ import {
   setPatientFirstName,
   setPatientLastName,
   setAllPatientInfo,
+  setPatientEmail,
 } from "../slices/globalSlice";
 import { patientSearchList, addNewPatient } from "../firebase";
 import MainButton from "./MainButton";
@@ -41,6 +42,9 @@ const PatientSearch = ({ globalRefresh }) => {
       patientArray: setPatientListArray,
       company: company,
     });
+    return () => {
+      undefined;
+    };
   }, [globalRefresh]);
   useEffect(() => {
     var searchedPatient = [];
@@ -64,6 +68,9 @@ const PatientSearch = ({ globalRefresh }) => {
       searchedPatient = [];
       setSearched(null);
     }
+    return () => {
+      undefined;
+    };
   }, [searchName, searchDob]);
 
   const addNewUser = () => {
@@ -154,6 +161,7 @@ const PatientSearch = ({ globalRefresh }) => {
                           dispatch(setPatientFirstName(item.firstName));
                           dispatch(setPatientLastName(item.lastName));
                           dispatch(setAllPatientInfo(item));
+                          dispatch(setPatientEmail(item.email));
                           setSearched([]);
                           setSearchName("");
                           setSearchDob("");

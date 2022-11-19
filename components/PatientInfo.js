@@ -10,6 +10,7 @@ import {
   getOnePatient,
 } from "../firebase";
 import InputBox from "./InputBox";
+import * as Haptics from "expo-haptics";
 
 export default function PatientInfo({ patientInfo }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -37,7 +38,7 @@ export default function PatientInfo({ patientInfo }) {
   const handleBarCodeScanned = async ({ type, data }) => {
     try {
       if (company !== null) {
-        await setScanned(true);
+        // await setScanned(true);
         addGiftCardToPatient({
           company: company,
           giftCardNumber: data,
@@ -45,6 +46,7 @@ export default function PatientInfo({ patientInfo }) {
           email: patientInfo2.email,
           currentAmountOnGiftCard: totalOnGiftCard,
         });
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         setRefresh(!refresh);
       } else {
         alert("no company");
@@ -182,11 +184,12 @@ export default function PatientInfo({ patientInfo }) {
             {!patientInfo2.giftCardNumber && (
               <View
                 style={{
-                  height: 300,
+                  height: 100,
                   width: Dimensions.get("screen").width / 1.5,
                   alignItems: "center",
                   flex: 1,
                   flexDirection: "column",
+                  marginBottom: 120,
                 }}
               >
                 <MainButton
@@ -196,7 +199,7 @@ export default function PatientInfo({ patientInfo }) {
                   }}
                 />
                 {addGiftCard && !addGiftCardTotal && (
-                  <View>
+                  <View style={{ marginBottom: 50 }}>
                     <InputBox
                       placeholder={"Total on Gift Card"}
                       width={Dimensions.get("screen").width / 1.8}
@@ -298,6 +301,7 @@ export default function PatientInfo({ patientInfo }) {
                 <MainButton
                   text={"Remove Gift Card"}
                   onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                     //confirm remove gift card
                     Alert.alert(
                       "Remove Gift Card",
@@ -316,6 +320,9 @@ export default function PatientInfo({ patientInfo }) {
 
                               email: patientInfo2.email,
                             });
+                            Haptics.impactAsync(
+                              Haptics.ImpactFeedbackStyle.Medium
+                            );
                             setRefresh(!refresh);
                           },
                         },

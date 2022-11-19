@@ -13,6 +13,8 @@ import { searchPatientByGiftCardNumber, useAmountGiftCard } from "../firebase";
 import { useSelector } from "react-redux";
 import { selectCompany } from "../slices/globalSlice";
 import InputBox from "../components/InputBox";
+import Picker from "../components/Picker";
+import * as Haptics from "expo-haptics";
 
 const Checkout = () => {
   const [scanGiftCard, setScanGiftCard] = useState(false);
@@ -31,6 +33,7 @@ const Checkout = () => {
           company: company,
           patientArray: setPatient,
         });
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         setRefresh(!refresh);
       } else {
         alert("no company");
@@ -177,6 +180,7 @@ const Checkout = () => {
                         >
                           Current Balance:
                         </Text>
+
                         <Text style={{ fontSize: 20 }}>
                           {item.currentAmountOnGiftCard}
                         </Text>
@@ -190,9 +194,11 @@ const Checkout = () => {
                         >
                           Date Was Purchased
                         </Text>
-                        <Text style={{ fontSize: 20 }}>
-                          {item.dateGiftCardWasAdded.toDate().toDateString()}
-                        </Text>
+                        {item.dateGiftCardWasAdded != null && (
+                          <Text style={{ fontSize: 20 }}>
+                            {item.dateGiftCardWasAdded.toDate().toDateString()}
+                          </Text>
+                        )}
                         <MainButton
                           text={"Use Gift Card"}
                           onPress={() => {

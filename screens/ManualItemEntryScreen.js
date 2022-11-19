@@ -35,14 +35,17 @@ const ManualItemEntryScreen = () => {
   var hours = currentDate.getHours();
   var year = currentDate.getFullYear();
 
-  useEffect(async () => {
+  useEffect(() => {
     const array = [];
-    await GetProducts({
+    GetProducts({
       selectedCompany: selectedCompany,
       typeOfProduct: typeOfProduct,
       array: array,
       productState: setProducts,
     });
+    return () => {
+      undefined;
+    };
   }, [selectedCompany, typeOfProduct]);
 
   return (
