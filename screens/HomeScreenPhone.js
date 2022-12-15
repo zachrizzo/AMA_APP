@@ -18,7 +18,12 @@ import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import MainButton from "../components/MainButton";
 import { useDispatch, useSelector } from "react-redux";
-import { setCompany, setIsAuthUser } from "../slices/globalSlice";
+import {
+  selectAllProducts,
+  setAllProducts,
+  setCompany,
+  setIsAuthUser,
+} from "../slices/globalSlice";
 import DividerLine from "../components/DividerLine";
 import { FontAwesome } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
@@ -81,6 +86,7 @@ const HomeScreenPhone = () => {
   var day = currentDate.getDate();
   const ITEM_SIZE = 90 + 18 * 3;
   const navigation = useNavigation();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Home",
@@ -176,6 +182,10 @@ const HomeScreenPhone = () => {
       console.log(e);
     }
   }, [companyDB, showOfficeEquipment, refresh, selectedCompany, anyItems]);
+  useEffect(() => {
+    dispatch(setAllProducts(products));
+  }, [products]);
+
   const ShowAuthSettings = () => {
     if (isAuthUser == true) {
       return (

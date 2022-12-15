@@ -35,7 +35,14 @@ export default function CompanyButton({
             backgroundColor: "#0008ff",
           }}
         >
-          <Text style={{ textAlign: "center", fontSize: 20, padding: 2 }}>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 20,
+              padding: 2,
+              color: "#ffffff",
+            }}
+          >
             {companyTextShort}
           </Text>
         </View>

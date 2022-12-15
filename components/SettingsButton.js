@@ -19,41 +19,28 @@ export default function SettingsButton({
   text,
   width,
 }) {
-  if (setting == true) {
-    return (
-      <TouchableOpacity onPress={onPressTrue}>
-        <View
+  return (
+    <TouchableOpacity onPress={setting ? onPressTrue : onPressFalse}>
+      <View
+        style={{
+          marginVertical: 5,
+          marginHorizontal: 20,
+          borderRadius: 20,
+          width: width,
+          backgroundColor: setting ? "#0008ff" : "#A9A9A9",
+        }}
+      >
+        <Text
           style={{
-            marginVertical: 5,
-            marginHorizontal: 20,
-            borderRadius: 20,
-            width: width,
-            backgroundColor: "#0008ff",
+            textAlign: "center",
+            fontSize: 20,
+            padding: 2,
+            color: setting ? "#ffffff" : "#000000",
           }}
         >
-          <Text style={{ textAlign: "center", fontSize: 20, padding: 2 }}>
-            {text}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  } else {
-    return (
-      <TouchableOpacity onPress={onPressFalse}>
-        <View
-          style={{
-            marginVertical: 5,
-            marginHorizontal: 20,
-            borderRadius: 20,
-            width: width,
-            backgroundColor: "#A9A9A9",
-          }}
-        >
-          <Text style={{ textAlign: "center", fontSize: 20, padding: 2 }}>
-            {text}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
+          {text}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 }

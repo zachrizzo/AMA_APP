@@ -192,8 +192,7 @@ const SignUp = () => {
             }
           >
             <Picker.Item label="AMA" value="AMA" />
-            <Picker.Item label="Vitalize Med Spa" value="Vitalize Med Spa" />
-            <Picker.Item label="Vitalize Infusion" value="Vitalize Infusion" />
+            <Picker.Item label="Vitalize Nation" value="Vitalize Nation" />
           </Picker>
           {/* <InputBox
             style={styles.inputTitle}

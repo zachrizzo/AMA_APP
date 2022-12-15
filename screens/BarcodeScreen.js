@@ -55,7 +55,7 @@ import { async } from "@firebase/util";
 import SettingsButton from "../components/SettingsButton";
 const BarcodeScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+  const [scanned, setScanned] = useState(true);
   const ITEM_SIZE = 90 + 18 * 3;
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -649,7 +649,7 @@ const BarcodeScreen = () => {
 
     try {
       if (selectedCompany !== null) {
-        await setScanned(true);
+        setScanned(true);
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         if (isEnabled3 == true) {
           if (addExisiting) {

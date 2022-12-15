@@ -22,6 +22,8 @@ const MISListItem = ({
   pickerValue,
   listKeyNumber,
   totalList,
+  setListOfProductsToRemoveFromInventory,
+  listOfProductsToRemoveFromInventory,
 }) => {
   const [otherPrice, setOtherPrice] = useState(null);
   const [discountPercentage, setDiscountPercentage] = useState("0");
@@ -34,52 +36,231 @@ const MISListItem = ({
   const listOfitemPosibiltys = [
     {
       product: "Myers Cocktail",
-      price: 150,
+      price: 180,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
-    },
-    {
-      product: "Mini Myers Cocktail",
-      price: 75,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML B Complex",
+          barcode: "BComp",
+        },
+        {
+          name: "-1ML B12",
+          barcode: "B12",
+        },
+      ],
     },
     {
       product: "1L Mini Myers Cocktail",
-      price: 100,
+      price: 135,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML B Complex",
+          barcode: "BComp",
+        },
+        {
+          name: "-1ML B12",
+          barcode: "B12",
+        },
+      ],
     },
     {
       product: "1L Saline",
+      price: 125,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+      ],
+    },
+    {
+      product: "500ml Saline",
       price: 100,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
-    },
-    {
-      product: "500ml Saline",
-      price: 80,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-500ml Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+      ],
     },
     {
       product: "Forever Young",
-      price: 150,
+      price: 180,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+      ],
     },
     {
       product: "Myers +",
-      price: 225,
+      price: 250,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "1ML B12",
+          barcode: "B12",
+        },
+        {
+          name: "1ML B Complex",
+          barcode: "BComp",
+        },
+      ],
     },
     {
       product: "NAD+ 500MG",
@@ -87,6 +268,24 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+      ],
     },
     {
       product: "NAD+ 250MG",
@@ -94,6 +293,20 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+      ],
     },
     {
       product: "NAD+ 1000MG",
@@ -101,126 +314,615 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+        {
+          name: "-1 DOSE NAD+",
+          barcode: "NAD",
+        },
+      ],
     },
     {
       product: "Vitamin C-5G",
-      price: 150,
+      price: 180,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+      ],
     },
+
     {
       product: "High Dose C",
       price: 300,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      //TODO: Add items used
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+      ],
     },
     {
-      product: "Electrolyte",
+      product: "Electrolyte Add-On",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+      ],
+    },
+    {
+      product: "Zinc Add-On",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+      ],
+    },
+    {
+      product: "Vitamin C Add-On",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+      ],
+    },
+    {
+      product: "Glutathione Add-On",
       price: 25,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+      ],
     },
     {
-      product: "Zinc",
-      price: 25,
+      product: "B Complex add-on",
+      price: 30,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
-    },
-    {
-      product: "Vitamin C",
-      price: 25,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
-    },
-    {
-      product: "Glutathione",
-      price: 25,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
-    },
-    {
-      product: "B Complex",
-      price: 25,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
-    },
-    {
-      product: "B-12",
-      price: 25,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML B Complex",
+          barcode: "BComp",
+        },
+      ],
     },
     {
       product: "B12 Add-On",
-      price: 25,
+      price: 30,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML B12",
+          barcode: "B12",
+        },
+      ],
     },
     {
-      product: "MIC-B12",
-      price: 25,
+      product: "500Ml Saline Exchange Add-On",
+      price: 0,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-500Ml Saline",
+          barcode: ".5LNS",
+        },
+      ],
     },
     {
-      product: "Vitamin D",
-      price: 25,
+      product: "B Complex Shot",
+      price: 30,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3cc",
+        },
+        {
+          name: "25G Needle",
+          barcode: "25GNd",
+        },
+        { name: "18G Needle", barcode: "18GNd" },
+        {
+          name: "-1ML B Complex",
+          barcode: "BComp",
+        },
+      ],
     },
     {
-      product: "MIC JAGGER",
+      product: "B-12 Shot",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3cc",
+        },
+        {
+          name: "25G Needle",
+          barcode: "25GNd",
+        },
+        { name: "18G Needle", barcode: "18GNd" },
+        {
+          name: "-1ML B-12",
+          barcode: "B12",
+        },
+      ],
+    },
+
+    {
+      product: "MIC-B12 Shot",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3cc",
+        },
+        {
+          name: "25G Needle",
+          barcode: "25GNd",
+        },
+        { name: "18G Needle", barcode: "18GNd" },
+        {
+          name: "-1ML MIC B12",
+          barcode: "MICB12",
+        },
+        {
+          name: "-1ML MIC B12",
+          barcode: "MICB12",
+        },
+      ],
+    },
+    {
+      product: "Vitamin D Shot",
+      price: 30,
+      discountPercentage: discountPercentage,
+      totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3cc",
+        },
+        {
+          name: "18G Needle",
+          barcode: "18GNd",
+        },
+        { name: "22G Needle", barcode: "23GNd" },
+        {
+          name: "-1ML Vitamin D",
+          barcode: "VD3",
+        },
+      ],
+    },
+    {
+      product: "MIC JAGGER Shot",
       price: 50,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3cc",
+        },
+        {
+          name: "18G Needle",
+          barcode: "18GNd",
+        },
+        { name: "25G Needle", barcode: "25GNd" },
+        {
+          name: "-1ML MIC B12",
+          barcode: "MICB12",
+        },
+        {
+          name: "-1ML B complex ",
+          barcode: "BComp",
+        },
+      ],
     },
 
     {
       product: "Glutathione Booster",
-      price: 50,
+      price: 80,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+      ],
     },
     {
       product: "Vitamin C Booster",
-      price: 50,
+      price: 80,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+      ],
     },
-    {
-      product: "Myers Booster",
-      price: 50,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
-    },
-    {
-      product: "Myers + Booster",
-      price: 75,
-      discountPercentage: discountPercentage,
-      totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isPrePaid,
-    },
+
     {
       product: "Watermelon Packet",
       price: 1,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Watermelon Packet",
+          barcode: "UWtmP",
+        },
+      ],
     },
     {
       product: "Watermelon Box",
@@ -228,6 +930,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Watermelon Box",
+          barcode: "UWtmB",
+        },
+      ],
     },
     {
       product: "Watermelon Canister",
@@ -235,6 +943,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Watermelon Canister",
+          barcode: "UWtmC",
+        },
+      ],
     },
     {
       product: "Watermelon Tub",
@@ -242,6 +956,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Watermelon Tub",
+          barcode: "UWtmT",
+        },
+      ],
     },
     {
       product: "Raspberry Packet",
@@ -249,6 +969,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Raspberry Packet",
+          barcode: "URsbP",
+        },
+      ],
     },
     {
       product: "Raspberry Box",
@@ -256,6 +982,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Raspberry Box",
+          barcode: "URsbB",
+        },
+      ],
     },
     {
       product: "Raspberry Canister",
@@ -263,6 +995,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Raspberry Canister",
+          barcode: "URsbC",
+        },
+      ],
     },
     {
       product: "Raspberry Tub",
@@ -270,6 +1008,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Raspberry Tub",
+          barcode: "URsbT",
+        },
+      ],
     },
     {
       product: "Grape Packet",
@@ -277,6 +1021,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Grape Packet",
+          barcode: "UGpP",
+        },
+      ],
     },
     {
       product: "Grape Box",
@@ -284,6 +1034,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Grape Box",
+          barcode: "UGpB",
+        },
+      ],
     },
     {
       product: "Grape Canister",
@@ -291,6 +1047,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Grape Canister",
+          barcode: "UGpC",
+        },
+      ],
     },
 
     {
@@ -299,6 +1061,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Grape Tub",
+          barcode: "UGpT",
+        },
+      ],
     },
     {
       product: "Orange Packet",
@@ -306,6 +1074,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Orange Packet",
+          barcode: "UOrgP",
+        },
+      ],
     },
     {
       product: "Orange Box",
@@ -313,6 +1087,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Orange Box",
+          barcode: "UOrgB",
+        },
+      ],
     },
     {
       product: "Orange Canister",
@@ -320,6 +1100,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Orange Canister",
+          barcode: "UOrgC",
+        },
+      ],
     },
     {
       product: "Orange Tub",
@@ -327,6 +1113,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Orange Tub",
+          barcode: "UOrgT",
+        },
+      ],
     },
 
     {
@@ -335,6 +1127,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Cherry Pomegranate Packet",
+          barcode: "UChpP",
+        },
+      ],
     },
     {
       product: "Cherry Pomegranate Box",
@@ -342,6 +1140,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Cherry Pomegranate Box",
+          barcode: "UChpB",
+        },
+      ],
     },
     {
       product: "Cherry Pomegranate Canister",
@@ -349,6 +1153,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Cherry Pomegranate Canister",
+          barcode: "UChPC",
+        },
+      ],
     },
     {
       product: "Cherry Pomegranate Tub",
@@ -356,6 +1166,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Cherry Pomegranate Tub",
+          barcode: "UChPT",
+        },
+      ],
     },
     {
       product: "Lemon Aid Packet",
@@ -363,6 +1179,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Lemon Aid Packet",
+          barcode: "ULmdP",
+        },
+      ],
     },
     {
       product: "Lemon Aid Box",
@@ -370,6 +1192,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Lemon Aid Box",
+          barcode: "ULmdB",
+        },
+      ],
     },
     {
       product: "Lemon Aid Canister",
@@ -377,6 +1205,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Lemon Aid Canister",
+          barcode: "ULmdC",
+        },
+      ],
     },
     {
       product: "Lemon Aid Tub",
@@ -384,6 +1218,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Lemon Aid Tub",
+          barcode: "ULmdT",
+        },
+      ],
     },
     {
       product: "Pink Lemon Aid Packet",
@@ -391,6 +1231,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Pink Lemon Aid Packet",
+          barcode: "UPLmP",
+        },
+      ],
     },
     {
       product: "Pink Lemon Aid Box",
@@ -398,6 +1244,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Pink Lemon Aid Box",
+          barcode: "UPLmB",
+        },
+      ],
     },
     {
       product: "Pink Lemon Aid Canister",
@@ -405,6 +1257,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Pink Lemon Aid Canister",
+          barcode: "UPLmC",
+        },
+      ],
     },
     {
       product: "Pink Lemon Aid Tub",
@@ -412,6 +1270,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Pink Lemon Aid Tub",
+          barcode: "UPLmT",
+        },
+      ],
     },
 
     {
@@ -420,6 +1284,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Blue Raspberry Packet",
+          barcode: "UBRspP",
+        },
+      ],
     },
     {
       product: "Blue Raspberry Box",
@@ -427,6 +1297,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Blue Raspberry Box",
+          barcode: "UBRspB",
+        },
+      ],
     },
     {
       product: "Blue Raspberry Canister",
@@ -434,6 +1310,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Blue Raspberry Canister",
+          barcode: "UBRspC",
+        },
+      ],
     },
     {
       product: "Blue Raspberry Tub",
@@ -441,6 +1323,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Blue Raspberry Tub",
+          barcode: "UBRspT",
+        },
+      ],
     },
     {
       product: "Mocktini Packet",
@@ -448,12 +1336,25 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Mocktini Packet",
+          barcode: "UMckP",
+        },
+      ],
     },
     {
       product: "Mocktini Box",
       price: 20,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
+      isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Mocktini Box",
+          barcode: "UMckB",
+        },
+      ],
     },
     {
       product: "Mocktini Canister",
@@ -461,6 +1362,12 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Mocktini Canister",
+          barcode: "UMckC",
+        },
+      ],
     },
     {
       product: "Mocktini Tub",
@@ -468,13 +1375,25 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Mocktini Tub",
+          barcode: "UMckT",
+        },
+      ],
     },
     {
       product: "Sarcotropin",
-      price: 200,
+      price: 250,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "Sarcotropin",
+          barcode: "SRCTYN",
+        },
+      ],
     },
     {
       product: "Lab Draw",
@@ -503,13 +1422,37 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+        {
+          name: "-1 IV Tubing",
+          barcode: "IVTBG",
+        },
+      ],
     },
     {
       product: "4MG Zofran",
-      price: 25,
+      price: 30,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3ML",
+        },
+        {
+          name: "18G Needle",
+          barcode: "18G",
+        },
+        {
+          name: "Zofran",
+          barcode: "ZFRN",
+        },
+      ],
     },
     {
       product: "AMA 4MG Zofran",
@@ -517,20 +1460,46 @@ const MISListItem = ({
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "3ML Syringe",
+          barcode: "3ML",
+        },
+        {
+          name: "18G Needle",
+          barcode: "18G",
+        },
+        {
+          name: "Zofran",
+          barcode: "ZFRN",
+        },
+      ],
     },
     {
       product: "Extra 1L",
-      price: 50,
+      price: 75,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1L Saline",
+          barcode: "1LNS",
+        },
+      ],
     },
     {
       product: "Extra 500ml",
-      price: 50,
+      price: 75,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-500ml Saline",
+          barcode: ".5LNS",
+        },
+      ],
     },
     {
       product: "3 Scans",
@@ -541,31 +1510,133 @@ const MISListItem = ({
     },
     {
       product: "1 Scans",
-      price: 60,
+      price: 65,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
     },
     {
       product: "Myers AMA Vitamins",
-      price: 75,
+      price: 100,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Ascorbic Acid",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML B Complex",
+          barcode: "BComp",
+        },
+        {
+          name: "-1ML B12",
+          barcode: "B12",
+        },
+      ],
     },
     {
       product: "Myers + AMA Vitamins",
-      price: 95,
+      price: 125,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Electrolytes",
+          barcode: "Electro",
+        },
+        {
+          name: "-1ML Zinc",
+          barcode: "Zinc",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Vitamin C",
+          barcode: "VitC",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "1ML B12",
+          barcode: "B12",
+        },
+        {
+          name: "1ML B Complex",
+          barcode: "BComp",
+        },
+      ],
     },
     {
       product: "Glutathione AMA Vitamins",
-      price: 75,
+      price: 100,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
       isPrePaid: isPrePaid,
+      itemsUsed: [
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+        {
+          name: "-1ML Glutathione",
+          barcode: "Glut",
+        },
+      ],
     },
     ///////////////////////////
     //////////////////////////
@@ -1330,7 +2401,7 @@ const MISListItem = ({
       price: 224,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
-      isPrePaid: isxPrePaid,
+      isPrePaid: isPrePaid,
     },
     {
       product: "The Skin Protection Kit",
@@ -1425,7 +2496,7 @@ const MISListItem = ({
       isPrePaid: isPrePaid,
     },
     {
-      product: "Instant Eye Gel ",
+      product: "Instant Eye Gel",
       price: 100,
       discountPercentage: discountPercentage,
       totalAfterDiscount: totalAfterDiscount,
@@ -1730,6 +2801,13 @@ const MISListItem = ({
                   } else {
                     totalList.push(totalAfterDiscount);
                   }
+                  item.itemsUsed?.forEach((item) => {
+                    listOfProductsToRemoveFromInventory.push(item);
+                  });
+                  console.log(
+                    "listOfProductsToRemoveFromInventory",
+                    listOfProductsToRemoveFromInventory
+                  );
                 }
               } else {
                 alert("if other is selected please enter a price");
@@ -1750,8 +2828,8 @@ const MISListItem = ({
         style={{
           flex: 1,
           marginVertical: 30,
-          backgroundColor: "#64646465",
-          borderRadius: 15,
+          backgroundColor: "#BABABA65",
+          borderRadius: 30,
         }}
       >
         <FlatList
@@ -1762,11 +2840,13 @@ const MISListItem = ({
             return (
               <View
                 style={{
-                  backgroundColor: "#E9E7E7D4",
+                  backgroundColor: "#F6F6F69A",
                   width: Dimensions.get("screen").width / 1.3,
                   margin: 10,
                   borderRadius: 40,
                   padding: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <TouchableOpacity
@@ -1776,6 +2856,23 @@ const MISListItem = ({
 
                     var indexTotlaList = totalList.indexOf(item);
                     totalList.splice(indexTotlaList, 1);
+                    item.itemsUsed?.forEach((item) => {
+                      if (
+                        listOfProductsToRemoveFromInventory.includes(
+                          item?.barcode
+                        )
+                      ) {
+                        var indexPickedList2 =
+                          listOfProductsToRemoveFromInventory.indexOf(
+                            item?.barcode
+                          );
+
+                        listOfProductsToRemoveFromInventory.splice(
+                          indexPickedList2,
+                          1
+                        );
+                      }
+                    });
 
                     setRefresh(!refresh);
                   }}
@@ -1793,6 +2890,64 @@ const MISListItem = ({
                   >
                     {item.isPrePaid == true ? "PrePaid" : "Not PrePaid"}
                   </Text>
+                  <FlatList
+                    data={item.itemsUsed}
+                    style={{
+                      width: "90%",
+                      marginVertical: 10,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    renderItem={({ item, index }) => {
+                      if (listOfProductsToRemoveFromInventory.includes(item)) {
+                        return (
+                          <TouchableOpacity
+                            style={{
+                              backgroundColor: "#ffffff",
+                              width: Dimensions.get("screen").width / 1.5,
+                              margin: 5,
+                              borderRadius: 15,
+                              padding: 10,
+                              justifyContent: "center",
+                              flex: 0.0001,
+                              flexDirection: "column",
+                            }}
+                            onLongPress={() => {
+                              //remove item from listOfProductsToRemoveFromInventory list
+                              var indexPickedList =
+                                listOfProductsToRemoveFromInventory.indexOf(
+                                  item?.barcode
+                                );
+                              listOfProductsToRemoveFromInventory?.splice(
+                                indexPickedList,
+                                1
+                              );
+                              setRefresh(!refresh);
+                            }}
+                          >
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                fontSize: 15,
+                              }}
+                            >
+                              {item.name}
+                            </Text>
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: "#A4A4A4",
+                                fontSize: 15,
+                              }}
+                            >
+                              {item.barcode}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      }
+                    }}
+                    listKey={(item, index) => index.toString()}
+                  />
                 </TouchableOpacity>
               </View>
             );

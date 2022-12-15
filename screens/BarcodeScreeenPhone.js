@@ -55,9 +55,9 @@ import { async } from "@firebase/util";
 import SettingsButton from "../components/SettingsButton";
 const BarcodeScreeenPhone = () => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+  const [scanned, setScanned] = useState(true);
   const ITEM_SIZE = 90 + 18 * 3;
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState(null);
   const [decription, setDecription] = useState(null);
@@ -65,11 +65,37 @@ const BarcodeScreeenPhone = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isEnabled1, setIsEnabled1] = useState(false);
   const [isEnabled2, setIsEnabled2] = useState(false);
+
   const [isEnabled3, setIsEnabled3] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-  const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
+
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    if (isEnabled1) {
+      toggleSwitch1();
+    }
+    if (isEnabled2) {
+      toggleSwitch2();
+    }
+  };
+  const toggleSwitch1 = () => {
+    setIsEnabled1((previousState) => !previousState);
+    if (isEnabled) {
+      toggleSwitch();
+    }
+    if (isEnabled2) {
+      toggleSwitch2();
+    }
+  };
+  const toggleSwitch2 = () => {
+    setIsEnabled2((previousState) => !previousState);
+    if (isEnabled) {
+      toggleSwitch();
+    }
+    if (isEnabled1) {
+      toggleSwitch1();
+    }
+  };
+
   const [deleted, setDeleted] = useState(false);
   // const [company, setCompany] = useState(null);
   const [months, setMonths] = useState(null);
@@ -263,7 +289,7 @@ const BarcodeScreeenPhone = () => {
   };
 
   const handleBarCodeScanned = async ({ type, data }) => {
-    const products = doc(db, "companys", selectedCompany, "products", data);
+    // const products = doc(db, "companys", selectedCompany, "products", data);
     setExpand(false);
     // const productHistory = doc(
     //   db,
@@ -275,13 +301,13 @@ const BarcodeScreeenPhone = () => {
 
     try {
       if (selectedCompany !== null) {
-        await setScanned(true);
+        setScanned(true);
         if (isEnabled3 == true) {
           if (addExisiting) {
             addExisitingItemToDb({
               barcode: data,
               itemName: name,
-              quanitiy: quantity,
+              quantity: quantity,
               description: decription,
               selectedCompany: selectedCompany,
               location: itemLocation,
@@ -295,11 +321,10 @@ const BarcodeScreeenPhone = () => {
             });
           } else {
             if (scanNew) {
-              console.log("bitch");
               AddNewItemToDb({
                 barcode: data,
                 itemName: name,
-                quanitiy: quantity,
+                quantity: quantity,
                 description: decription,
                 selectedCompany: selectedCompany,
                 location: itemLocation,
@@ -315,7 +340,7 @@ const BarcodeScreeenPhone = () => {
               UseExistingItemOnDb({
                 barcode: data,
                 itemName: name,
-                quanitiy: quantity,
+                quantity: quantity,
                 description: decription,
                 selectedCompany: selectedCompany,
                 location: itemLocation,
@@ -348,7 +373,7 @@ const BarcodeScreeenPhone = () => {
             addExisitingItemToDb({
               barcode: data,
               itemName: name,
-              quanitiy: quantity,
+              quantity: quantity,
               description: decription,
               selectedCompany: selectedCompany,
               location: itemLocation,
@@ -365,7 +390,7 @@ const BarcodeScreeenPhone = () => {
               AddNewItemToDb({
                 barcode: data,
                 itemName: name,
-                quanitiy: quantity,
+                quantity: quantity,
                 description: decription,
                 selectedCompany: selectedCompany,
                 location: itemLocation,
@@ -378,20 +403,25 @@ const BarcodeScreeenPhone = () => {
                 ItemType: "products",
               });
             } else {
-              UseExistingItemOnDb({
-                barcode: data,
-                itemName: name,
-                quanitiy: quantity,
-                description: decription,
-                selectedCompany: selectedCompany,
-                location: itemLocation,
-                data: data,
-                year: year.toString(),
-                month: month.toString(),
-                day: day.toString(),
-                hours: todays.toString(),
-                type: type,
-                ItemType: "products",
+              //check if item exists
+              products.forEach((item) => {
+                if (item.barcode === data) {
+                  UseExistingItemOnDb({
+                    barcode: data,
+                    itemName: name,
+                    quantity: quantity,
+                    description: decription,
+                    selectedCompany: selectedCompany,
+                    location: itemLocation,
+                    data: data,
+                    year: year.toString(),
+                    month: month.toString(),
+                    day: day.toString(),
+                    hours: todays.toString(),
+                    type: type,
+                    ItemType: "products",
+                  });
+                }
               });
             }
 
@@ -440,26 +470,15 @@ const BarcodeScreeenPhone = () => {
             companyTextLong={"AMA"}
           />
           <CompanyButton
-            companyTextShort={"VMS"}
+            companyTextShort={"Vitalize"}
             onPress={() => {
-              setSelectedCompany("Vitalize Med Spa");
+              setSelectedCompany("Vitalize Nation");
             }}
             onPressNull={() => {
               setSelectedCompany(null);
             }}
             selectedCompany={selectedCompany}
-            companyTextLong={"Vitalize Med Spa"}
-          />
-          <CompanyButton
-            companyTextShort={"VIC"}
-            onPress={() => {
-              setSelectedCompany("Vitalize Infusion");
-            }}
-            onPressNull={() => {
-              setSelectedCompany(null);
-            }}
-            selectedCompany={selectedCompany}
-            companyTextLong={"Vitalize Infusion"}
+            companyTextLong={"Vitalize Nation"}
           />
         </View>
       );
@@ -601,131 +620,183 @@ const BarcodeScreeenPhone = () => {
                 flex: 1,
               }}
             >
-              <Animated.FlatList
-                data={products}
-                onScroll={Animated.event(
-                  [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                  { useNativeDriver: true }
-                )}
-                renderItem={({ item, index }) => {
-                  const inputRange = [
-                    -1,
-                    0,
-                    ITEM_SIZE * index,
-                    ITEM_SIZE * (index + 2),
-                  ];
-                  const opacityinputRange = [
-                    -1,
-                    0,
-                    ITEM_SIZE * index,
-                    ITEM_SIZE * (index + 1),
-                  ];
+              {!expand && (
+                <Animated.FlatList
+                  data={products}
+                  onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: true }
+                  )}
+                  renderItem={({ item, index }) => {
+                    const inputRange = [
+                      -1,
+                      0,
+                      ITEM_SIZE * index,
+                      ITEM_SIZE * (index + 2),
+                    ];
+                    const opacityinputRange = [
+                      -1,
+                      0,
+                      ITEM_SIZE * index,
+                      ITEM_SIZE * (index + 1),
+                    ];
 
-                  const scale = scrollY.interpolate({
-                    inputRange,
-                    outputRange: [1, 1, 1, 0],
-                  });
-                  const opacity = scrollY.interpolate({
-                    inputRange: opacityinputRange,
-                    outputRange: [1, 1, 1, 0],
-                  });
+                    const scale = scrollY.interpolate({
+                      inputRange,
+                      outputRange: [1, 1, 1, 0],
+                    });
+                    const opacity = scrollY.interpolate({
+                      inputRange: opacityinputRange,
+                      outputRange: [1, 1, 1, 0],
+                    });
 
-                  return (
-                    <Animated.View style={{ transform: [{ scale }], opacity }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          if (isEnabled) {
-                            DeleteItemOnDB({
+                    return (
+                      <Animated.View
+                        style={{ transform: [{ scale }], opacity }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (isEnabled) {
+                              DeleteItemOnDB({
+                                selectedCompany: selectedCompany,
+                                data: item.barcode,
+                                year: year.toString(),
+                                month: month.toString(),
+                                day: day.toString(),
+                                hours: todays.toString(),
+                                ItemType: "products",
+                              });
+                            } else if (isDelete) {
+                              DeleteItemOnDB({
+                                selectedCompany: selectedCompany,
+                                data: item.barcode,
+                                year: year.toString(),
+                                month: month.toString(),
+                                day: day.toString(),
+                                hours: todays.toString(),
+                                ItemType: "office_equipment",
+                              });
+                            } else if (isEnabled2) {
+                              console.log(
+                                item.barcode,
+                                item.product,
+                                item.quantity,
+                                item.description,
+                                selectedCompany,
+                                item.itemLocation,
+                                item.type_of_barcode
+                              );
+                              addExisitingItemToDb({
+                                barcode: item.barcode,
+                                itemName: item.product,
+                                quantity: item.quantity,
+                                description: item.description,
+                                selectedCompany: selectedCompany,
+                                location: item.itemLocation,
+                                data: item.barcode,
+                                year: year.toString(),
+                                month: month.toString(),
+                                day: day.toString(),
+                                hours: todays.toString(),
+                                type: item.type_of_barcode,
+                                ItemType: "products",
+                              });
+                            }
+                          }}
+                          onLongPress={() => {
+                            UseExistingItemOnDb({
+                              barcode: item.barcode,
+                              itemName: item.product,
+                              quantity: item.quantity,
+                              description: item.description,
                               selectedCompany: selectedCompany,
+                              location: item.itemLocation,
                               data: item.barcode,
                               year: year.toString(),
                               month: month.toString(),
                               day: day.toString(),
                               hours: todays.toString(),
+                              type: item.type_of_barcode,
                               ItemType: "products",
                             });
-                          } else {
-                            return null;
-                          }
-                          if (isDelete) {
-                            DeleteItemOnDB({
-                              selectedCompany: selectedCompany,
-                              data: item.barcode,
-                              year: year.toString(),
-                              month: month.toString(),
-                              day: day.toString(),
-                              hours: todays.toString(),
-                              ItemType: "office_equipment",
-                            });
-                          } else {
-                            return null;
-                          }
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: "#F1F1F1EA",
-                            // padding: 20,
-                            marginVertical: 10,
-                            // paddingHorizontal: 20,
-                            width: Dimensions.get("screen").width / 3,
-                            height: 70,
-                            borderRadius: 40,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            alignSelf: "center",
                           }}
                         >
-                          <Text
+                          <View
                             style={{
-                              fontSize: 18,
+                              backgroundColor: "#F1F1F1EA",
+                              // padding: 20,
+                              marginVertical: 10,
+                              // paddingHorizontal: 20,
+                              width: Dimensions.get("screen").width / 2.6,
+
+                              borderRadius: 40,
                               justifyContent: "center",
+                              alignItems: "center",
                               alignSelf: "center",
-                              color: "#000000CE",
+                              overflow: "hidden",
+                              padding: 10,
                             }}
                           >
-                            {item.product}
-                          </Text>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                color: "#000000CE",
+                                textAlign: "center",
+                              }}
+                            >
+                              {item.product}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 15,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                color: "#36C1DAE1",
+                              }}
+                            >
+                              Quantity:{item.quantity}
+                            </Text>
+                          </View>
                           <Text
                             style={{
+                              justifyContent: "center",
+                              alignSelf: "center",
+                              color: "#5A5858AF",
                               fontSize: 15,
-                              justifyContent: "center",
-                              alignSelf: "center",
-                              color: "#36C1DAE1",
                             }}
                           >
-                            Quantity:{item.quantity}
+                            Barcode: {item.barcode}
                           </Text>
-                        </View>
-                        <Text
-                          style={{
-                            justifyContent: "center",
-                            alignSelf: "center",
-                            color: "#5A5858AF",
-                            fontSize: 15,
-                          }}
-                        >
-                          Barcode: {item.barcode}
-                        </Text>
-                      </TouchableOpacity>
-                    </Animated.View>
-                  );
-                }}
-                keyExtractor={(item) => item.id}
-                showsVerticalScrollIndicator={false}
-              />
+                        </TouchableOpacity>
+                      </Animated.View>
+                    );
+                  }}
+                  keyExtractor={(item) => item.id}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
             </View>
 
             {scanned && (
               <View style={{ paddingBottom: 30 }}>
                 <DividerLine
                   lineColor={"#0008ff"}
-                  lineWidth={Dimensions.get("screen").width / 2.5}
+                  lineWidth={
+                    expand
+                      ? Dimensions.get("window").width / 4
+                      : Dimensions.get("window").width / 2.5
+                  }
                 />
 
                 <MainButton
-                  buttonWidth={Dimensions.get("window").width / 2.5}
-                  text={"Tap to Scan"}
+                  buttonWidth={
+                    expand
+                      ? Dimensions.get("window").width / 4
+                      : Dimensions.get("window").width / 2.5
+                  }
+                  text={expand ? "Scan" : "Tap to Scan"}
                   onPress={() => setScanned(false)}
                 />
               </View>

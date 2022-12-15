@@ -20,6 +20,7 @@ import {
   collection,
   setDoc,
   doc,
+  addDoc,
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { add } from "react-native-reanimated";
@@ -41,7 +42,7 @@ export const functions = getFunctions(app);
 export async function AddNewItemToDbManualy({
   barcode,
   itemName,
-  quanitiy,
+  quantity,
   description,
   selectedCompany,
   location,
@@ -61,7 +62,7 @@ export async function AddNewItemToDbManualy({
         ItemType: ItemType,
         id: barcode,
         product: itemName,
-        quantity: quanitiy,
+        quantity: quantity,
         description: description,
         company: selectedCompany,
         timestamp: serverTimestamp(),
@@ -93,7 +94,7 @@ export async function AddNewItemToDbManualy({
             ItemType: ItemType,
             company: selectedCompany,
             timestamp: serverTimestamp(),
-            quantity: quanitiy,
+            quantity: quantity,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
           },
           { merge: true }
@@ -121,7 +122,7 @@ export async function AddNewItemToDbManualy({
             ItemType: ItemType,
             company: selectedCompany,
             timestamp: serverTimestamp(),
-            quantity: quanitiy,
+            quantity: quantity,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
           },
           { merge: true }
@@ -150,7 +151,7 @@ export async function AddNewItemToDbManualy({
             day: day,
             company: selectedCompany,
             timestamp: serverTimestamp(),
-            quantity: quanitiy,
+            quantity: quantity,
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
           },
           { merge: true }
@@ -185,7 +186,7 @@ export async function AddNewItemToDbManualy({
               barcode: data,
               id: data,
               product: itemName,
-              quantity: quanitiy,
+              quantity: quantity,
               description: description,
               company: selectedCompany,
               ItemType: ItemType,
@@ -209,7 +210,7 @@ export async function AddNewItemToDbManualy({
 export async function addExisitingItemToDb({
   barcode,
   itemName,
-  quanitiy,
+  quantity,
   description,
   selectedCompany,
   location,
@@ -229,7 +230,7 @@ export async function addExisitingItemToDb({
         // barcode: data,
         // id: data,
         // product: name,
-
+        timestamp: serverTimestamp(),
         quantity: increment(1),
       },
       { merge: true }
@@ -339,7 +340,7 @@ export async function addExisitingItemToDb({
             barcode: barcode,
             id: data,
             product: itemName,
-            quantity: quanitiy,
+            quantity: quantity,
             description: description,
             company: selectedCompany,
             timestamp: serverTimestamp(),
@@ -353,14 +354,14 @@ export async function addExisitingItemToDb({
         );
       });
   } catch (error) {
-    console.log("i got an error ${error}");
+    console.log(`i got an error ${error}`);
   }
 }
 
 export async function AddNewItemToDb({
   barcode,
   itemName,
-  quanitiy,
+  quantity,
   description,
   selectedCompany,
   location,
@@ -379,7 +380,7 @@ export async function AddNewItemToDb({
         barcode: barcode,
         id: barcode,
         product: itemName,
-        quantity: quanitiy,
+        quantity: quantity,
         description: description,
         company: selectedCompany,
         ItemType: ItemType,
@@ -387,6 +388,7 @@ export async function AddNewItemToDb({
         itemLocation: location,
         lastPersonToScan: auth.currentUser.email,
         peopleWhoScanned: arrayUnion(auth.currentUser.email),
+        type_of_barcode: type,
 
         // quantity: increment(1),
       },
@@ -504,7 +506,7 @@ export async function AddNewItemToDb({
             barcode: data,
             id: data,
             product: itemName,
-            quantity: quanitiy,
+            quantity: quantity,
             company: selectedCompany,
             description: description,
             company: selectedCompany,
@@ -518,6 +520,34 @@ export async function AddNewItemToDb({
           },
           { merge: true }
         );
+      })
+      .then(async () => {
+        await addDoc(
+          collection(
+            db,
+            "companys",
+            selectedCompany,
+            ItemType,
+            data,
+            "allUsages"
+          ),
+          {
+            type_of_barcode: type,
+            barcode: barcode,
+            id: barcode,
+            product: itemName,
+            quantity: quantity,
+            description: description,
+            company: selectedCompany,
+            itemLocation: location,
+            lastPersonToScan: auth.currentUser.email,
+            timestamp: serverTimestamp(),
+            quantity: increment(1),
+            peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            typeOfUsage: "added",
+          },
+          { merge: true }
+        );
       });
   } catch (e) {
     alert(e);
@@ -526,7 +556,7 @@ export async function AddNewItemToDb({
 export async function UseExistingItemOnDb({
   barcode,
   itemName,
-  quanitiy,
+  quantity,
   description,
   selectedCompany,
   location,
@@ -552,7 +582,7 @@ export async function UseExistingItemOnDb({
       { merge: true }
     );
   } catch (error) {
-    console.log("i got an error ${error}");
+    console.log(`i got an error ${error}`);
   }
   try {
     await setDoc(
@@ -650,7 +680,7 @@ export async function UseExistingItemOnDb({
             barcode: barcode,
             id: barcode,
             product: itemName,
-            quantity: quanitiy,
+            quantity: quantity,
             description: description,
             company: selectedCompany,
 
@@ -662,9 +692,37 @@ export async function UseExistingItemOnDb({
           },
           { merge: true }
         );
+      })
+      .then(async () => {
+        await addDoc(
+          collection(
+            db,
+            "companys",
+            selectedCompany,
+            ItemType,
+            data,
+            "allUsages"
+          ),
+          {
+            type_of_barcode: type,
+            barcode: barcode,
+            id: barcode,
+            product: itemName,
+            quantity: quantity,
+            description: description,
+            company: selectedCompany,
+            itemLocation: location,
+            lastPersonToScan: auth.currentUser.email,
+            timestamp: serverTimestamp(),
+            quantity: increment(-1),
+            peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            typeOfUsage: "used",
+          },
+          { merge: true }
+        );
       });
   } catch (error) {
-    console.log("i got an error ${error}");
+    console.log(`i got an error ${error}`);
     alert(error);
   }
 }
@@ -1165,6 +1223,8 @@ export const addMIS = async ({
   total,
   totalBeforeDiscount,
   timePatientWasSeen,
+  listOfProductsToRemoveFromInventory,
+  hour,
 }) => {
   try {
     await setDoc(
@@ -1200,6 +1260,8 @@ export const addMIS = async ({
         DOB: DOB,
         totalBeforeDiscount: totalBeforeDiscount,
         timePatientWasSeen: timePatientWasSeen,
+        listOfProductsToRemoveFromInventory:
+          listOfProductsToRemoveFromInventory,
       },
       { merge: true }
     ).then(() => {
@@ -1220,6 +1282,33 @@ export const addMIS = async ({
           whoSubmitted: auth.currentUser.email,
           total: total,
           timePatientWasSeen: timePatientWasSeen,
+          typeOfInjections: typeOfInjections,
+          typeOfPatient: typeOfPatient,
+          typeOfIvBag: typeOfIvBag,
+          typeOfaddons: typeOfaddons,
+          typeOfBoosters: typeOfboosters,
+          typeofReferral: typeofReferral,
+          typeOfAppointment: typeOfAppointment,
+          fullName: lastName + ", " + firstName,
+          firstName: firstName,
+          lastName: lastName,
+          visitId: visitId,
+          email: email,
+          providerReferral: providerRefural,
+          timestamp: serverTimestamp(),
+          whoSubmitted: auth.currentUser.email,
+          discount: discount,
+          paymentMethod: paymentMethod,
+          ulitma: ulitmaList,
+          boosters: typeOfboosters,
+          total: total,
+          phlebotomyList: phlebotomyList,
+          stykuList: stykuList,
+          DOB: DOB,
+          totalBeforeDiscount: totalBeforeDiscount,
+          timePatientWasSeen: timePatientWasSeen,
+          listOfProductsToRemoveFromInventory:
+            listOfProductsToRemoveFromInventory,
         },
         { merge: true }
       );
@@ -1283,6 +1372,11 @@ export async function addGiftCardToPatient({
   giftCardNumber,
   totalOnGiftCard,
   currentAmountOnGiftCard,
+  firstName,
+  lastName,
+
+  phoneNumber,
+  DOB,
 }) {
   await setDoc(
     doc(db, "companys", company, "patients", email),
@@ -1293,20 +1387,56 @@ export async function addGiftCardToPatient({
       currentAmountOnGiftCard: currentAmountOnGiftCard,
     },
     { merge: true }
-  );
+  ).then(async () => {
+    await setDoc(
+      doc(db, "companys", company, "giftCards", giftCardNumber),
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        DOB: DOB,
+        dateGiftCardWasAdded: serverTimestamp(),
+        giftCardNumber: giftCardNumber,
+        totalOnGiftCard: totalOnGiftCard,
+        currentAmountOnGiftCard: currentAmountOnGiftCard,
+      },
+      { merge: true }
+    );
+  });
 }
 //remove gift card from patient
-export async function removeGiftCardFromPatient({ email, company }) {
+export async function removeGiftCardFromPatient({
+  giftCardNumber,
+  email,
+  company,
+}) {
   await setDoc(
     doc(db, "companys", company, "patients", email),
     {
       giftCardNumber: deleteField(),
       totalOnGiftCard: deleteField(),
       currentAmountOnGiftCard: deleteField(),
-      dateGiftCardWasAdded: deleteField(),
+      // dateGiftCardWasAdded: deleteField(),
     },
     { merge: true }
-  );
+  ).then(async () => {
+    await setDoc(
+      doc(db, "companys", company, "giftCards", giftCardNumber),
+      {
+        firstName: deleteField(),
+        lastName: deleteField(),
+        email: deleteField(),
+        phoneNumber: deleteField(),
+        DOB: deleteField(),
+        dateGiftCardWasAdded: deleteField(),
+        giftCardNumber: deleteField(),
+        totalOnGiftCard: deleteField(),
+        currentAmountOnGiftCard: deleteField(),
+      },
+      { merge: true }
+    );
+  });
 }
 //get one patient
 export function getOnePatient({ patientArray, email, company }) {
@@ -1323,7 +1453,7 @@ export function getOnePatient({ patientArray, email, company }) {
   }
 }
 // search patient by gift card number
-export function searchPatientByGiftCardNumber({
+export async function searchPatientByGiftCardNumber({
   patientArray,
   giftCardNumber,
   company,
@@ -1342,7 +1472,9 @@ export function searchPatientByGiftCardNumber({
 
           // key: snap.id;
         });
-        patientArray(quantitysnap);
+        if (quantitysnap.length !== 0) {
+          patientArray(quantitysnap);
+        }
 
         // console.log(' fireeee x  ' + quantitysnap)
       }
@@ -1357,12 +1489,118 @@ export async function useAmountGiftCard({
   company,
   currentAmountOnGiftCard,
   amountToUse,
+  giftCardNumber,
+}) {
+  try {
+    await setDoc(
+      doc(db, "companys", company, "giftCards", giftCardNumber),
+      {
+        currentAmountOnGiftCard: amountToUse,
+      },
+      { merge: true }
+    ).then(async () => {
+      await setDoc(
+        doc(db, "companys", company, "patients", email),
+        {
+          currentAmountOnGiftCard: amountToUse,
+        },
+        { merge: true }
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+//add gift card under gift card number
+export async function addGiftCardToGiftCardNumber({
+  giftCardNumber,
+  company,
+  totalOnGiftCard,
+  currentAmountOnGiftCard,
 }) {
   await setDoc(
-    doc(db, "companys", company, "patients", email),
+    doc(db, "companys", company, "giftCards", giftCardNumber),
     {
-      currentAmountOnGiftCard: amountToUse,
+      totalOnGiftCard: totalOnGiftCard,
+      currentAmountOnGiftCard: currentAmountOnGiftCard,
+      dateGiftCardWasAdded: serverTimestamp(),
+      timestamp: serverTimestamp(),
+      personWhoCheckPatientOut: auth.currentUser.email,
+      giftCardNumber: giftCardNumber,
     },
     { merge: true }
   );
+}
+//search gift card by number
+export async function searchGiftCardByNumber({
+  giftCardArray,
+  giftCardNumber,
+  company,
+}) {
+  try {
+    onSnapshot(
+      query(
+        collection(db, "companys", company, "giftCards"),
+        where("giftCardNumber", "==", giftCardNumber)
+      ),
+      (querySnapshot) => {
+        const quantitysnap = [];
+
+        querySnapshot.forEach((snap) => {
+          quantitysnap.push(snap.data());
+
+          // key: snap.id;
+        });
+        if (quantitysnap.length !== 0) {
+          giftCardArray(quantitysnap);
+        }
+
+        // console.log(' fireeee x  ' + quantitysnap)
+      }
+    );
+  } catch (e) {
+    e;
+  }
+}
+//add patient to gift card
+export async function addPatientToGiftCard({
+  giftCardNumber,
+  company,
+  email,
+  firstName,
+  lastName,
+  phoneNumber,
+  DOB,
+  totalOnGiftCard,
+  currentAmountOnGiftCard,
+  dateGiftCardWasAdded,
+}) {
+  await setDoc(
+    doc(db, "companys", company, "giftCards", giftCardNumber),
+    {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      DOB: DOB,
+      dateGiftCardWasAdded: dateGiftCardWasAdded(),
+    },
+    { merge: true }
+  ).then(async () => {
+    await setDoc(
+      doc(db, "companys", company, "patients", email),
+      {
+        giftCardNumber: giftCardNumber,
+        totalOnGiftCard: totalOnGiftCard,
+        currentAmountOnGiftCard: currentAmountOnGiftCard,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        DOB: DOB,
+        dateGiftCardWasAdded: dateGiftCardWasAdded,
+      },
+      { merge: true }
+    );
+  });
 }

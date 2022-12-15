@@ -12,12 +12,13 @@ import InputBox from "../components/InputBox";
 import { Picker } from "@react-native-picker/picker";
 import DividerLine from "../components/DividerLine";
 import MainButton from "../components/MainButton";
-import { addMIS } from "../firebase";
-import { arrayUnion } from "firebase/firestore";
+import { addMIS, UseExistingItemOnDb } from "../firebase";
+
 import MISListItem from "../components/MISListItem";
 import PatientSearch from "../components/PatientSearch";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  selectAllProducts,
   selectPatientDOB,
   selectPatientEmail,
   selectPatientFirstName,
@@ -26,6 +27,7 @@ import {
   setPatientFirstName,
   setPatientLastName,
 } from "../slices/globalSlice";
+import { increment } from "firebase/firestore";
 // import DatePicker from "@react-native-community/datetimepicker";
 
 const MISscreen = () => {
@@ -74,14 +76,25 @@ const MISscreen = () => {
   const [splendorX, setSplendorX] = useState("Vascular Treatment");
   const [splendorXList, setSplendorXList] = useState([]);
   const [splendorXObject, setSplendorXObject] = useState(null);
+  const [
+    listOfProductsToRemoveFromInventory,
+    setListOfProductsToRemoveFromInventory,
+  ] = useState([]);
 
   const firstName = useSelector(selectPatientFirstName);
   const lastName = useSelector(selectPatientLastName);
   const dob = useSelector(selectPatientDOB);
   const email = useSelector(selectPatientEmail);
   const dispatch = useDispatch();
+  const allProducts = useSelector(selectAllProducts);
 
   const [timePatientWasSeen, setTimePatientWasSeen] = useState("9:00AM");
+
+  var year = new Date().getFullYear();
+  var month = new Date().getMonth() + 1;
+  var day = new Date().getDate();
+  var hour = new Date().getHours();
+  console.log("kkkk", allProducts);
 
   const amaProvider = () => {
     if (typeOfRefural == "AMA Provider") {
@@ -118,9 +131,7 @@ const MISscreen = () => {
       undefined;
     };
   }, [refresh]);
-  // useEffect(() => {
-  //   console.log(firstNames);
-  // }, [firstNames]);
+
   useEffect(() => {
     //get total by adding up all in toal list
 
@@ -314,10 +325,6 @@ const MISscreen = () => {
                       value="Myers Cocktail"
                     />,
                     <Picker.Item
-                      label="Mini Myers Cocktail"
-                      value="Mini Myers Cocktail"
-                    />,
-                    <Picker.Item
                       label="1L Mini Myers Cocktail"
                       value="1L Mini Myers Cocktail"
                     />,
@@ -345,6 +352,9 @@ const MISscreen = () => {
                   setObject={setIvBagObject}
                   object={ivBagObject}
                   listKeyNumber={1}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
 
                 {ivBagList.find((element) => {
@@ -379,24 +389,43 @@ const MISscreen = () => {
                     setObject={setAmaVitaminsObject}
                     object={amaVitaminsObject}
                     listKeyNumber={2}
+                    listOfProductsToRemoveFromInventory={
+                      listOfProductsToRemoveFromInventory
+                    }
                   />
                 )}
 
                 <MISListItem
                   titleOfList={"Add Ons"}
                   pickerItems={[
-                    <Picker.Item label="Myers +" value="Myers +" />,
-                    <Picker.Item label="Electrolyte" value="Electrolyte" />,
-                    <Picker.Item label="Electrolyte" value="Electrolyte" />,
-                    <Picker.Item label="Zinc" value="Zinc" />,
-                    <Picker.Item label="Vitamin C" value="Vitamin C" />,
-                    <Picker.Item label="Glutathione" value="Glutathione" />,
-                    <Picker.Item label="B Complex" value="B Complex" />,
+                    <Picker.Item
+                      label="Electrolyte Add-On"
+                      value="Electrolyte Add-On"
+                    />,
+
+                    <Picker.Item label="Zinc Add-On" value="Zinc Add-On" />,
+                    <Picker.Item
+                      label="Vitamin C Add-On"
+                      value="Vitamin C Add-On"
+                    />,
+                    <Picker.Item
+                      label="Glutathione Add-On"
+                      value="Glutathione Add-On"
+                    />,
+                    <Picker.Item
+                      label="B Complex add-on"
+                      value="B Complex add-on"
+                    />,
                     <Picker.Item label="B12 Add-On" value="B12 Add-On" />,
                     <Picker.Item label="4MG Zofran" value="4MG Zofran" />,
+
                     <Picker.Item
                       label="AMA 4MG Zofran"
                       value="AMA 4MG Zofran"
+                    />,
+                    <Picker.Item
+                      label="500Ml Saline Exchange Add-On"
+                      value="500Ml Saline Exchange Add-On"
                     />,
                   ]}
                   setPickedList={setAddOnsList}
@@ -408,17 +437,28 @@ const MISscreen = () => {
                   pickerValue={addOns}
                   totalList={totalList}
                   listKeyNumber={3}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"Injections"}
                   pickerItems={[
-                    <Picker.Item label="B Complex" value="B Complex" />,
-                    <Picker.Item label="B-12" value="B-12" />,
-                    <Picker.Item label="MIC-B12" value="MIC-B12" />,
-                    <Picker.Item label="Vitamin D" value="Vitamin D" />,
-                    <Picker.Item label="MIC JAGGER" value="MIC JAGGER" />,
-                    <Picker.Item label="Extra 500ml" value="Extra 500ml" />,
-                    <Picker.Item label="Extra 1L" value="Extra 1L" />,
+                    <Picker.Item
+                      label="B Complex Shot"
+                      value="B Complex Shot"
+                    />,
+
+                    <Picker.Item label="B-12 Shot" value="B-12 Shot" />,
+                    <Picker.Item label="MIC-B12 Shot" value="MIC-B12 Shot" />,
+                    <Picker.Item
+                      label="Vitamin D Shot"
+                      value="Vitamin D Shot"
+                    />,
+                    <Picker.Item
+                      label="MIC JAGGER Shot"
+                      value="MIC JAGGER Shot"
+                    />,
                   ]}
                   setPickedList={setInjectionsList}
                   selectedValue={vitaminInjections}
@@ -429,6 +469,9 @@ const MISscreen = () => {
                   pickerValue={vitaminInjections}
                   totalList={totalList}
                   listKeyNumber={4}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"boosters"}
@@ -441,11 +484,6 @@ const MISscreen = () => {
                       label="Vitamin C Booster"
                       value="Vitamin C Booster"
                     />,
-                    <Picker.Item label="Myers Booster" value="Myers Booster" />,
-                    <Picker.Item
-                      label="Myers + Booster"
-                      value="Myers + Booster"
-                    />,
                   ]}
                   setPickedList={setBoosterList}
                   selectedValue={booster}
@@ -456,6 +494,9 @@ const MISscreen = () => {
                   pickerValue={booster}
                   totalList={totalList}
                   listKeyNumber={5}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
                   Payment Type
@@ -483,7 +524,7 @@ const MISscreen = () => {
                 {/* //Watermelon, raspberry, grape, orange, cherry pomegranate,lemon
                 aid ,pink lemon aid, blue raspberry,mocktini */}
                 <MISListItem
-                  titleOfList={"Ulitma Replenisher"}
+                  titleOfList={"Products"}
                   pickerItems={[
                     <Picker.Item
                       label="Watermelon Packet"
@@ -604,6 +645,9 @@ const MISscreen = () => {
                   pickerValue={ulitma}
                   totalList={totalList}
                   listKeyNumber={6}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"Styku"}
@@ -620,6 +664,9 @@ const MISscreen = () => {
                   pickerValue={styku}
                   totalList={totalList}
                   listKeyNumber={7}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"Phlebotomy"}
@@ -643,6 +690,9 @@ const MISscreen = () => {
                   pickerValue={Phlebotomy}
                   totalList={totalList}
                   listKeyNumber={8}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
                   MedSpa
@@ -717,6 +767,9 @@ const MISscreen = () => {
                   pickerValue={splendorX}
                   totalList={totalList}
                   listKeyNumber={9}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"Virtue RF"}
@@ -789,18 +842,105 @@ const MISscreen = () => {
                   pickerValue={virtueRF}
                   totalList={totalList}
                   listKeyNumber={10}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
-                  titleOfList={"PCA"}
+                  titleOfList={"Skin Better"}
                   pickerItems={[
-                    <Picker.Item label="Lab Draw" value="Lab Draw" />,
+                    <Picker.Item label="Cleaning Gel" value="Cleaning Gel" />,
+                    <Picker.Item label="Oxygen Wash" value="Oxygen Wash" />,
                     <Picker.Item
-                      label="Therapeutic Phlebotomy"
-                      value="Therapeutic Phlebotomy"
+                      label="Detoxifying Scrub Mask"
+                      value="Detoxifying Scrub Mask"
                     />,
                     <Picker.Item
-                      label="Other Phlebotomy"
-                      value="Other Phlebotomy"
+                      label="AlphaRet Peel Pads"
+                      value="AlphaRet Peel Pads"
+                    />,
+                    <Picker.Item
+                      label="Alto Defense Serum 1oz"
+                      value="Alto Defense Serum 1oz"
+                    />,
+                    <Picker.Item
+                      label="Alto Defense Serum 1.7oz"
+                      value="Alto Defense Serum 1.7oz"
+                    />,
+                    <Picker.Item
+                      label="Alto Advanced Defense & Repair Serum"
+                      value="Alto Advanced Defense & Repair Serum"
+                    />,
+                    <Picker.Item
+                      label="Solo Hydrating Defense 1oz"
+                      value="Solo Hydrating Defense 1oz"
+                    />,
+                    <Picker.Item
+                      label="Intensive Lines .5oz"
+                      value="Intensive Lines .5oz"
+                    />,
+                    <Picker.Item
+                      label="Intensive Lines 1oz"
+                      value="Intensive Lines 1oz"
+                    />,
+                    <Picker.Item
+                      label="EyeMax AlphaRet"
+                      value="EyeMax AlphaRet"
+                    />,
+                    <Picker.Item
+                      label="Interfuse Eye Cream"
+                      value="Interfuse Eye Cream"
+                    />,
+                    <Picker.Item
+                      label="Instant Eye Gel"
+                      value="Instant Eye Gel"
+                    />,
+                    <Picker.Item
+                      label="Interfuse Face & Neck 1oz"
+                      value="Interfuse Face & Neck 1oz"
+                    />,
+                    <Picker.Item
+                      label="Interfuse Face & Neck 1.7oz"
+                      value="Interfuse Face & Neck 1.7oz"
+                    />,
+                    <Picker.Item
+                      label="Techno Neck Perfecting Cream"
+                      value="Techno Neck Perfecting Cream"
+                    />,
+                    <Picker.Item label="Even" value="Even" />,
+                    <Picker.Item
+                      label="Hydration Boosting Cream"
+                      value="Hydration Boosting Cream"
+                    />,
+                    <Picker.Item
+                      label="Trio Rebalancing Moisturizer"
+                      value="Trio Rebalancing Moisturizer"
+                    />,
+                    <Picker.Item label="AlphaRet 1oz" value="AlphaRet 1oz" />,
+                    <Picker.Item
+                      label="AlphaRet Clearing Serum .5oz"
+                      value="AlphaRet Clearing Serum .5oz"
+                    />,
+                    <Picker.Item label="A-Team Duo" value="A-Team Duo" />,
+                    <Picker.Item
+                      label="TONE SMART Lotion SPF 75"
+                      value="TONE SMART Lotion SPF 75"
+                    />,
+                    <Picker.Item
+                      label="TONE SMART Compact SPF 68"
+                      value="TONE SMART Compact SPF 68"
+                    />,
+                    <Picker.Item
+                      label="SHEER Lotion SPF 70"
+                      value="SHEER Lotion SPF 70"
+                    />,
+                    <Picker.Item
+                      label="SHEER Stick SPF 56"
+                      value="SHEER Stick SPF 56"
+                    />,
+                    <Picker.Item
+                      label="SHEER Compact SPF 56"
+                      value="SHEER Compact SPF 56"
                     />,
                   ]}
                   setPickedList={setPhlebotomyList}
@@ -812,6 +952,242 @@ const MISscreen = () => {
                   pickerValue={Phlebotomy}
                   totalList={totalList}
                   listKeyNumber={11}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
+                />
+                <MISListItem
+                  titleOfList={"PCA"}
+                  pickerItems={[
+                    <Picker.Item
+                      label="BPO 5% Cleanser"
+                      value="BPO 5% Cleanser"
+                    />,
+                    <Picker.Item
+                      label="Creamy Cleanser"
+                      value="Creamy Cleanser"
+                    />,
+                    <Picker.Item
+                      label="Daily Cleansing Oil"
+                      value="Daily Cleansing Oil"
+                    />,
+                    <Picker.Item
+                      label="Daily Exfoliant"
+                      value="Daily Exfoliant"
+                    />,
+                    <Picker.Item label="Facial Wash" value="Facial Wash" />,
+                    <Picker.Item
+                      label="Facial Wash Oily/Problem"
+                      value="Facial Wash Oily/Problem"
+                    />,
+                    <Picker.Item
+                      label="Makeup Removing Wipes"
+                      value="Makeup Removing Wipes"
+                    />,
+                    <Picker.Item
+                      label="Blemish Control Bar"
+                      value="Blemish Control Bar"
+                    />,
+                    <Picker.Item
+                      label="Dry Skin Relief Bar"
+                      value="Dry Skin Relief Bar"
+                    />,
+                    <Picker.Item label="Pigment Bar" value="Pigment Bar" />,
+                    <Picker.Item
+                      label="Daily Cleansing Bar"
+                      value="Daily Cleansing Bar"
+                    />,
+                    <Picker.Item
+                      label="Hydrating Toner"
+                      value="Hydrating Toner"
+                    />,
+                    <Picker.Item
+                      label="Nutrient Toner"
+                      value="Nutrient Toner"
+                    />,
+                    <Picker.Item
+                      label="Smoothing Toner"
+                      value="Smoothing Toner"
+                    />,
+                    <Picker.Item
+                      label="Detoxifying Mask"
+                      value="Detoxifying Mask"
+                    />,
+                    <Picker.Item
+                      label="Hyaluronic Acid Overnight Mask"
+                      value="Hyaluronic Acid Overnight Mask"
+                    />,
+                    <Picker.Item
+                      label="Hydrating Mask"
+                      value="Hydrating Mask"
+                    />,
+                    <Picker.Item
+                      label="Pore Refining Treatment"
+                      value="Pore Refining Treatment"
+                    />,
+                    <Picker.Item
+                      label="Purifying Mask"
+                      value="Purifying Mask"
+                    />,
+                    <Picker.Item
+                      label="Daily Defense Mist"
+                      value="Daily Defense Mist"
+                    />,
+                    <Picker.Item
+                      label="Dual Action Redness Relief"
+                      value="Dual Action Redness Relief"
+                    />,
+                    <Picker.Item
+                      label="ExLinea Peptide Smoothing Serum"
+                      value="ExLinea Peptide Smoothing Serum"
+                    />,
+                    <Picker.Item
+                      label="Hyaluronic Acid Lip Booster"
+                      value="Hyaluronic Acid Lip Booster"
+                    />,
+                    <Picker.Item
+                      label="Hydrating Serum"
+                      value="Hydrating Serum"
+                    />,
+                    <Picker.Item
+                      label="Ideal Complex Restorative Eye Cream I year"
+                      value="Ideal Complex Restorative Eye Cream I year"
+                    />,
+                    <Picker.Item
+                      label="Ideal Complex® Revitalizing Eye Gel 4-5 months"
+                      value="Ideal Complex® Revitalizing Eye Gel 4-5 months"
+                    />,
+                    <Picker.Item
+                      label="Intensive Age Refining Treatment"
+                      value="Intensive Age Refining Treatment"
+                    />,
+                    <Picker.Item
+                      label="Intensive Brightening Treatment"
+                      value="Intensive Brightening Treatment"
+                    />,
+                    <Picker.Item
+                      label="Intensive Clarity Treatment"
+                      value="Intensive Clarity Treatment"
+                    />,
+                    <Picker.Item
+                      label="Peptide Lip Therapy"
+                      value="Peptide Lip Therapy"
+                    />,
+                    <Picker.Item
+                      label="Perfecting Neck & Decollete"
+                      value="Perfecting Neck & Decollete"
+                    />,
+                    <Picker.Item
+                      label="Pigment Gel HQ Free"
+                      value="Pigment Gel HQ Free"
+                    />,
+                    <Picker.Item
+                      label="Pore Minimizer Skin Mattifying Gel"
+                      value="Pore Minimizer Skin Mattifying Gel"
+                    />,
+                    <Picker.Item
+                      label="Rejuvenating Serum"
+                      value="Rejuvenating Serum"
+                    />,
+                    <Picker.Item
+                      label="Resveratrol Restorative Complex"
+                      value="Resveratrol Restorative Complex"
+                    />,
+                    <Picker.Item
+                      label="Retinol Renewal with RestorAtive Complex"
+                      value="Retinol Renewal with RestorAtive Complex"
+                    />,
+                    <Picker.Item
+                      label="Retinol Treatment for Sensitive Skin"
+                      value="Retinol Treatment for Sensitive Skin"
+                    />,
+                    <Picker.Item
+                      label="Total Strength Serum"
+                      value="Total Strength Serum"
+                    />,
+                    <Picker.Item
+                      label="Vitamin b3 Brightening Serum"
+                      value="Vitamin b3 Brightening Serum"
+                    />,
+                    <Picker.Item
+                      label="Active Broad Spectrum SPF 45"
+                      value="Active Broad Spectrum SPF 45"
+                    />,
+                    <Picker.Item
+                      label="Active Protection Body Broad Spectrum SPF 30"
+                      value="Active Protection Body Broad Spectrum SPF 30"
+                    />,
+                    <Picker.Item
+                      label="Daily Defense SPF 50"
+                      value="Daily Defense SPF 50"
+                    />,
+                    <Picker.Item
+                      label="Hydrator Plus Broad Spectrum SPF 30"
+                      value="Hydrator Plus Broad Spectrum SPF 30"
+                    />,
+                    <Picker.Item
+                      label="Sheer Tint Broad Spectrum SPF 45"
+                      value="Sheer Tint Broad Spectrum SPF 45"
+                    />,
+                    <Picker.Item
+                      label="Sheer Tint Eye Broad Spectrum SPF 30"
+                      value="Sheer Tint Eye Broad Spectrum SPF 30"
+                    />,
+                    <Picker.Item
+                      label="Weightless Protection Broad Spectrum SPF 45"
+                      value="Weightless Protection Broad Spectrum SPF 45"
+                    />,
+                    <Picker.Item
+                      label="Apres Peel Hydrating Balm"
+                      value="Apres Peel Hydrating Balm"
+                    />,
+                    <Picker.Item label="Clearskin" value="Clearskin" />,
+                    <Picker.Item
+                      label="Collagen Hydrator"
+                      value="Collagen Hydrator"
+                    />,
+                    <Picker.Item label="HydraLuxe" value="HydraLuxe" />,
+                    <Picker.Item label="ReBalance" value="ReBalance" />,
+                    <Picker.Item label="Silkcoat Balm" value="Silkcoat Balm" />,
+                    <Picker.Item
+                      label="Skin Procedure Oinment"
+                      value="Skin Procedure Oinment"
+                    />,
+                    <Picker.Item label="Body Therapy" value="Body Therapy" />,
+                    <Picker.Item
+                      label="Daily care|Kits"
+                      value="Daily care|Kits"
+                    />,
+                    <Picker.Item
+                      label="Micro Peel At Home Kit"
+                      value="Micro Peel At Home Kit"
+                    />,
+                    <Picker.Item
+                      label="The Post-Procedure Solution"
+                      value="The Post-Procedure Solution"
+                    />,
+                    <Picker.Item
+                      label="The Skin Recovery Kit"
+                      value="The Skin Recovery Kit"
+                    />,
+
+                    <Picker.Item
+                      label="The Skin Protection Kit"
+                      value="The Skin Protection Kit"
+                    />,
+                  ]}
+                  setPickedList={setPhlebotomyList}
+                  selectedValue={Phlebotomy}
+                  setPickerState={setPhlebotomy}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  pickedList={PhlebotomyList}
+                  pickerValue={Phlebotomy}
+                  totalList={totalList}
+                  listKeyNumber={12}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <MISListItem
                   titleOfList={"Phlebotomy"}
@@ -834,7 +1210,10 @@ const MISscreen = () => {
                   pickedList={PhlebotomyList}
                   pickerValue={Phlebotomy}
                   totalList={totalList}
-                  listKeyNumber={12}
+                  listKeyNumber={13}
+                  listOfProductsToRemoveFromInventory={
+                    listOfProductsToRemoveFromInventory
+                  }
                 />
                 <Text style={{ marginTop: 30, fontSize: 18, marginBottom: 10 }}>
                   Discount
@@ -917,32 +1296,71 @@ const MISscreen = () => {
                         phlebotomyList: PhlebotomyList,
                         totalBeforeDiscount: totalBeforeDiscount,
                         timePatientWasSeen: timePatientWasSeen,
-                      }).then(() => {
-                        setIvBagList([]);
-                        setProviderRefural(null);
-                        setInjectionsList([]);
-                        setTotalList([]);
-                        setTypeOfRefural(null);
-                        setTypeOfAppoinment(null);
-                        setAddOnsList([]);
-                        setUlitmaList([]);
-                        setDiscount(0);
-                        setPaymentMethod(null);
-                        setVisitNumber(null);
-                        setBoosterList([]);
-                        setTypeOfPatient(null);
-                        setTotal(0);
-                        setStykuList([]);
-                        setPhlebotomyList([]);
-                        setTotalBeforeDiscount(0);
-                        setTimePatientWasSeen(null);
+                        listOfProductsToRemoveFromInventory:
+                          listOfProductsToRemoveFromInventory,
+                        year: year,
+                        month: month,
+                        day: day,
+                        hour: hour,
+                      })
+                        .then(() => {
+                          try {
+                            listOfProductsToRemoveFromInventory.forEach(
+                              (item) => {
+                                allProducts.forEach((product) => {
+                                  if (product.barcode == item.barcode) {
+                                    console.log("itemhhhhhhhhhhhhhhh" + item);
+                                    //TODO:make it loop through products to rab descriptions and stuff
+                                    UseExistingItemOnDb({
+                                      barcode: product.barcode,
+                                      itemName: product.product,
+                                      quantity: product.quantity,
+                                      description: product.description,
+                                      selectedCompany: "Vitalize Nation",
+                                      location: product.itemLocation,
+                                      data: item.barcode,
+                                      year: year.toString(),
+                                      month: month.toString(),
+                                      day: day.toString(),
+                                      hours: hour.toString(),
+                                      type: "org.iso.Code128",
+                                      ItemType: "products",
+                                    });
+                                  }
+                                });
+                              }
+                            );
+                          } catch (error) {
+                            console.log(`alert ${error}}`);
+                          }
+                        })
+                        .then(() => {
+                          setIvBagList([]);
+                          setProviderRefural(null);
+                          setInjectionsList([]);
+                          setTotalList([]);
+                          setTypeOfRefural(null);
+                          setTypeOfAppoinment(null);
+                          setAddOnsList([]);
+                          setUlitmaList([]);
+                          setDiscount(0);
+                          setPaymentMethod(null);
+                          setVisitNumber(null);
+                          setBoosterList([]);
+                          setTypeOfPatient(null);
+                          setTotal(0);
+                          setStykuList([]);
+                          setPhlebotomyList([]);
+                          setTotalBeforeDiscount(0);
+                          setTimePatientWasSeen("9:00AM");
 
-                        dispatch(setPatientDOB(null));
-                        dispatch(setPatientFirstName(""));
-                        dispatch(setPatientLastName(""));
-                        setRefresh(!refresh);
-                        alert("MIS Added");
-                      });
+                          dispatch(setPatientDOB(null));
+                          dispatch(setPatientFirstName(""));
+                          dispatch(setPatientLastName(""));
+                          setRefresh(!refresh);
+                          setListOfProductsToRemoveFromInventory([]);
+                          alert("MIS Added");
+                        });
                     }
                   }}
                   buttonWidth={Dimensions.get("screen").width / 1.2}

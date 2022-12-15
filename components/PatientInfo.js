@@ -45,6 +45,10 @@ export default function PatientInfo({ patientInfo }) {
           totalOnGiftCard: totalOnGiftCard,
           email: patientInfo2.email,
           currentAmountOnGiftCard: totalOnGiftCard,
+          firstName: patientInfo2.firstName,
+          lastName: patientInfo2.lastName,
+          phoneNumber: patientInfo2.phoneNumber,
+          DOB: patientInfo2.DOB,
         });
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         setRefresh(!refresh);
@@ -317,6 +321,7 @@ export default function PatientInfo({ patientInfo }) {
                           onPress: () => {
                             removeGiftCardFromPatient({
                               company: company,
+                              giftCardNumber: patientInfo2.giftCardNumber,
 
                               email: patientInfo2.email,
                             });

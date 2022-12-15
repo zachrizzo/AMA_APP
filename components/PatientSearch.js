@@ -15,6 +15,7 @@ import {
   setPatientLastName,
   setAllPatientInfo,
   setPatientEmail,
+  setPatientPhoneNumber,
 } from "../slices/globalSlice";
 import { patientSearchList, addNewPatient } from "../firebase";
 import MainButton from "./MainButton";
@@ -162,6 +163,7 @@ const PatientSearch = ({ globalRefresh }) => {
                           dispatch(setPatientLastName(item.lastName));
                           dispatch(setAllPatientInfo(item));
                           dispatch(setPatientEmail(item.email));
+                          dispatch(setPatientPhoneNumber(item.phoneNumber));
                           setSearched([]);
                           setSearchName("");
                           setSearchDob("");
