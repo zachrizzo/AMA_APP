@@ -2836,6 +2836,7 @@ const MISListItem = ({
           data={pickedList}
           bounces={false}
           style={{ width: "90%" }}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
             return (
               <View
@@ -2851,28 +2852,17 @@ const MISListItem = ({
               >
                 <TouchableOpacity
                   onLongPress={() => {
+                    item.itemsUsed?.forEach((item) => {
+                      //remove all items from list of products to remove from inventory
+                      var index =
+                        listOfProductsToRemoveFromInventory.indexOf(item);
+                      listOfProductsToRemoveFromInventory.splice(index, 1);
+                    });
                     var indexPickedList = pickedList.indexOf(item);
                     pickedList.splice(indexPickedList, 1);
 
-                    var indexTotlaList = totalList.indexOf(item);
-                    totalList.splice(indexTotlaList, 1);
-                    item.itemsUsed?.forEach((item) => {
-                      if (
-                        listOfProductsToRemoveFromInventory.includes(
-                          item?.barcode
-                        )
-                      ) {
-                        var indexPickedList2 =
-                          listOfProductsToRemoveFromInventory.indexOf(
-                            item?.barcode
-                          );
-
-                        listOfProductsToRemoveFromInventory.splice(
-                          indexPickedList2,
-                          1
-                        );
-                      }
-                    });
+                    var indexTotalList = totalList.indexOf(item);
+                    totalList.splice(indexTotalList, 1);
 
                     setRefresh(!refresh);
                   }}
@@ -2914,14 +2904,15 @@ const MISListItem = ({
                             }}
                             onLongPress={() => {
                               //remove item from listOfProductsToRemoveFromInventory list
-                              var indexPickedList =
+                              const itemIndex =
                                 listOfProductsToRemoveFromInventory.indexOf(
-                                  item?.barcode
+                                  item
                                 );
-                              listOfProductsToRemoveFromInventory?.splice(
-                                indexPickedList,
+                              listOfProductsToRemoveFromInventory.splice(
+                                itemIndex,
                                 1
                               );
+
                               setRefresh(!refresh);
                             }}
                           >
@@ -2952,7 +2943,6 @@ const MISListItem = ({
               </View>
             );
           }}
-          keyExtractor={(item, index) => item.product}
           listKey={listKeyNumber}
         />
       </View>

@@ -13,14 +13,17 @@ import SignUp from "./screens/SignUpScreen";
 import ToDo from "./screens/ToDoScreen";
 import ManualItemEntryScreen from "./screens/ManualItemEntryScreen";
 import HomeScreenPhone from "./screens/HomeScreenPhone";
-import BarcodeScreeenPhone from "./screens/BarcodeScreeenPhone";
+import BarcodeScreenPhone from "./screens/BarcodeScreenPhone";
 import MISscreen from "./screens/MISscreen";
 import TodoTaskPage from "./screens/ToDoTaskScreen";
 import InventoryItemEdit from "./screens/InventoryItemEdit";
 import Patients from "./screens/PatientsScreen";
 import Checkout from "./screens/Checkout";
+import { createStackNavigator } from "@react-navigation/stack";
+import AllGiftCards from "./screens/AllGiftCards";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+const BarcodeStack = createStackNavigator();
 const golbalScreenOptions = {
   headerStyle: { backgroundColor: "#FFFFFF" },
   headerTitle: { color: "#121111" },
@@ -42,12 +45,14 @@ const ShowPhoneVersionHome = () => {
     return <Drawer.Screen name="Home" component={HomeScreenPhone} />;
   }
 };
+
 const ShowPhoneVersionBarcode = () => {
   if (Platform.isPad == true) {
-    return <Drawer.Screen name="Barcode Screen" component={BarcodeScreen} />;
+    return <Drawer.Screen name="Barcode Screen" component={BarcodeStack} />;
   } else {
+    //unmount the barcode screen when you go to the home screen
     return (
-      <Drawer.Screen name="Barcode Screen" component={BarcodeScreeenPhone} />
+      <Drawer.Screen name="Barcode Screen" component={BarcodeScreenPhone} />
     );
   }
 };
@@ -75,6 +80,7 @@ const StackNavigator = () => {
           name="User Options Screen"
           component={UserOptionsScreen}
         />
+        <Stack.Screen name="Gift Cards" component={AllGiftCards} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -88,8 +94,8 @@ function DrawerNavigator() {
       {ShowPhoneVersionHome()}
       {/* <Drawer.Screen name="ToDo" component={ToDo} /> */}
       {ShowPhoneVersionBarcode()}
-      <Drawer.Screen name="Add Item" component={ManualItemEntryScreen} />
-      <Drawer.Screen name="MIS" component={MISscreen} />
+      {/* <Drawer.Screen name="Add Item" component={ManualItemEntryScreen} /> */}
+      <Drawer.Screen name="VMS MIS" component={MISscreen} />
       <Drawer.Screen name="Patients" component={Patients} />
       <Drawer.Screen name="Checkout" component={Checkout} />
     </Drawer.Navigator>

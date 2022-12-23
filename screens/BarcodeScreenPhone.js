@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -53,7 +53,10 @@ import CompanyButton from "../components/CompanyPickerButton";
 import InputBox from "../components/InputBox";
 import { async } from "@firebase/util";
 import SettingsButton from "../components/SettingsButton";
-const BarcodeScreeenPhone = () => {
+import { useFocusEffect } from "@react-navigation/native";
+
+const BarcodeScreenPhone = () => {
+  const [showScannerIsInView, setShowScannerIsInView] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(true);
   const ITEM_SIZE = 90 + 18 * 3;
@@ -113,6 +116,7 @@ const BarcodeScreeenPhone = () => {
   const [companyDB, setCompanyDB] = useState(company);
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const [year, setYear] = useState();
+  let scanner = useRef();
   useEffect(() => {
     if (isAuthUser == true) {
       if (selectedCompany != null) {
@@ -130,7 +134,20 @@ const BarcodeScreeenPhone = () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-  }, []);
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      setShowScannerIsInView(true);
+
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+        setShowScannerIsInView(false);
+      };
+    }, [])
+  );
 
   useEffect(() => {
     if (isEnabled3 == true) {
@@ -609,10 +626,13 @@ const BarcodeScreeenPhone = () => {
     >
       <View style={{ flex: 1, flexDirection: "column" }}>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={StyleSheet.absoluteFillObject}
-          />
+          {showScannerIsInView && (
+            <BarCodeScanner
+              ref={scanner}
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              style={StyleSheet.absoluteFillObject}
+            />
+          )}
           <View style={{ flex: 0.5 }}>
             <View
               style={{
@@ -809,6 +829,6 @@ const BarcodeScreeenPhone = () => {
   );
 };
 
-export default BarcodeScreeenPhone;
+export default BarcodeScreenPhone;
 
 const styles = StyleSheet.create({});

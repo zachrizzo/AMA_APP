@@ -31,6 +31,8 @@ import Picker from "../components/Picker";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import PatientSearch from "../components/PatientSearch";
+import BigSquareButton from "../components/BigSquareButton";
+import { useNavigation } from "@react-navigation/native";
 
 //import hero icons
 
@@ -62,6 +64,7 @@ const Checkout = () => {
     searchedGiftCardDateWasPurchased,
     setSearchedGiftCardDateWasPurchased,
   ] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (showPatientSearch) {
@@ -679,6 +682,17 @@ const Checkout = () => {
                   </View>
                 )}
               </View>
+              {!giftCardInfo && (
+                <BigSquareButton
+                  onPress={() => {
+                    Haptics.notificationAsync(
+                      Haptics.NotificationFeedbackType.Success
+                    );
+                    navigation.navigate("Gift Cards");
+                  }}
+                  buttonText={"See All GiftCards"}
+                />
+              )}
             </View>
           );
         }}

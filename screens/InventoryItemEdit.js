@@ -30,6 +30,7 @@ const InventoryItemEdit = () => {
   const [productLocation, setProductLocation] = useState(null);
   const product = useSelector(selectSelectedProduct);
   const [add, setAdd] = useState(false);
+  const [incrementQuantity, setIncrementQuantity] = useState(null);
   const currentDate = new Date();
   var month = currentDate.getMonth() + 1;
   var day = currentDate.getDate();
@@ -43,7 +44,7 @@ const InventoryItemEdit = () => {
       if (productName === null || productName === "") {
         setProductName(product.product);
       }
-      if (productQuantity === null || productQuantity === "") {
+      if (productQuantity === null || productQuantity == "") {
         setProductQuantity(product.quantity);
       }
       if (productDescription === null || productDescription === "") {
@@ -66,7 +67,7 @@ const InventoryItemEdit = () => {
         AddNewItemToDbManualy({
           barcode: product.barcode,
           itemName: productName,
-          quanitiy: parseInt(productQuantity),
+          quantity: parseInt(productQuantity),
           description: productDescription,
           selectedCompany: product.company,
           location: productLocation,
@@ -77,6 +78,7 @@ const InventoryItemEdit = () => {
           hours: hours.toString(),
           type: null,
           ItemType: product.type,
+          incrementQuantity: incrementQuantity,
         }).then(() => {
           navigation.navigate("Home");
         });
@@ -126,11 +128,20 @@ const InventoryItemEdit = () => {
               color={"#0008ff"}
               placeholder={product.quantity.toString()}
               value={productQuantity}
-              onChangeText={(text) => setProductQuantity(text)}
+              onChangeText={(text) => {
+                //if product.quantity is greater than productQuantity add a negative sign
+                if (product.quantity > parseInt(text)) {
+                  setIncrementQuantity(product.quantity - parseInt(text));
+                  setProductQuantity(text);
+                } else {
+                  setProductQuantity(text);
+                  setIncrementQuantity(text);
+                }
+              }}
             />
             <InputBox
               color={"#0008ff"}
-              placeholder={"description"}
+              placeholder={product.description}
               value={productDescription}
               onChangeText={(text) => setProductDescription(text)}
             />

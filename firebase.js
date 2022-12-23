@@ -53,6 +53,7 @@ export async function AddNewItemToDbManualy({
   hours,
   type,
   ItemType,
+  incrementQuantity,
 }) {
   try {
     await setDoc(
@@ -202,6 +203,34 @@ export async function AddNewItemToDbManualy({
         } catch (e) {
           alert(e);
         }
+      })
+      .then(async () => {
+        await addDoc(
+          collection(
+            db,
+            "companys",
+            selectedCompany,
+            ItemType,
+            data,
+            "allUsages"
+          ),
+          {
+            type_of_barcode: type,
+            barcode: barcode,
+            id: barcode,
+            product: itemName,
+            quantity: quantity,
+            description: description,
+            company: selectedCompany,
+            itemLocation: location,
+            lastPersonToScan: auth.currentUser.email,
+            timestamp: serverTimestamp(),
+            quantity: increment(incrementQuantity),
+            peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            typeOfUsage: "added",
+          },
+          { merge: true }
+        );
       });
   } catch (e) {
     alert(e);
@@ -349,6 +378,34 @@ export async function addExisitingItemToDb({
             timestamp: serverTimestamp(),
             quantity: increment(1),
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
+          },
+          { merge: true }
+        );
+      })
+      .then(async () => {
+        await addDoc(
+          collection(
+            db,
+            "companys",
+            selectedCompany,
+            ItemType,
+            data,
+            "allUsages"
+          ),
+          {
+            type_of_barcode: type,
+            barcode: barcode,
+            id: barcode,
+            product: itemName,
+            quantity: quantity,
+            description: description,
+            company: selectedCompany,
+            itemLocation: location,
+            lastPersonToScan: auth.currentUser.email,
+            timestamp: serverTimestamp(),
+            quantity: increment(1),
+            peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            typeOfUsage: "added",
           },
           { merge: true }
         );
@@ -1603,4 +1660,27 @@ export async function addPatientToGiftCard({
       { merge: true }
     );
   });
+}
+export function GetAllGiftCards({ giftCardArray, company }) {
+  try {
+    onSnapshot(
+      query(collection(db, "companys", "Vitalize Nation", "giftCards")),
+      (querySnapshot) => {
+        const quantitysnap = [];
+
+        querySnapshot.forEach((snap) => {
+          quantitysnap.push(snap.data());
+
+          // key: snap.id;
+        });
+        if (quantitysnap.length !== 0) {
+          giftCardArray(quantitysnap);
+        }
+
+        // console.log(' fireeee x  ' + quantitysnap)
+      }
+    );
+  } catch (e) {
+    e;
+  }
 }
