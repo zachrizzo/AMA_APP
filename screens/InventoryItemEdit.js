@@ -48,10 +48,26 @@ const InventoryItemEdit = () => {
         setProductQuantity(product.quantity);
       }
       if (productDescription === null || productDescription === "") {
-        setProductDescription(product.description);
+        if (
+          product.description === undefined ||
+          product.description === "" ||
+          product.description === null
+        ) {
+          setProductDescription("No description");
+        } else {
+          setProductDescription(product.description);
+        }
       }
       if (productLocation === null || productLocation === "") {
-        setProductLocation(product.location);
+        if (
+          product.location === undefined ||
+          product.location === "" ||
+          product.location === null
+        ) {
+          setProductLocation("No location");
+        } else {
+          setProductLocation(product.location);
+        }
       }
 
       if (

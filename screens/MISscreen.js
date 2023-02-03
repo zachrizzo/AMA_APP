@@ -1325,6 +1325,7 @@ const MISscreen = () => {
                                       hours: hour.toString(),
                                       type: "org.iso.Code128",
                                       ItemType: "products",
+                                      patientThatUsedItem: email,
                                     });
                                   }
                                 });

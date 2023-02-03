@@ -161,7 +161,7 @@ export default function PatientInfo({ patientInfo }) {
               Sign up date:
             </Text>
             <Text style={{ fontSize: 30 }}>
-              {patientInfo2.timestamp.toDate().toDateString()}
+              {patientInfo2?.timestamp?.toDate().toDateString()}
             </Text>
           </View>
           <View

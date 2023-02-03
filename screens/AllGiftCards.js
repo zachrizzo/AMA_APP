@@ -22,6 +22,7 @@ const AllGiftCards = () => {
     let total = 0;
     let totalMoney = 0;
     giftCards.map((item) => {
+      
       total = total + 1;
       totalMoney = totalMoney + parseInt(item.currentAmountOnGiftCard);
     });

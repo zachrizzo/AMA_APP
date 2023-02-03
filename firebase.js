@@ -624,6 +624,7 @@ export async function UseExistingItemOnDb({
   hours,
   type,
   ItemType,
+  patientThatUsedItem,
 }) {
   try {
     await setDoc(
@@ -653,6 +654,7 @@ export async function UseExistingItemOnDb({
         timestamp: serverTimestamp(),
         quantity: increment(1),
         peopleWhoScanned: arrayUnion(auth.currentUser.email),
+        patientThatUsedItem: arrayUnion(patientThatUsedItem),
       },
       { merge: true }
     )
@@ -678,6 +680,7 @@ export async function UseExistingItemOnDb({
             timestamp: serverTimestamp(),
             quantity: increment(1),
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            patientThatUsedItem: arrayUnion(patientThatUsedItem),
           },
           { merge: true }
         );
@@ -706,6 +709,7 @@ export async function UseExistingItemOnDb({
             timestamp: serverTimestamp(),
             quantity: increment(1),
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            patientThatUsedItem: arrayUnion(patientThatUsedItem),
           },
           { merge: true }
         );
@@ -746,6 +750,7 @@ export async function UseExistingItemOnDb({
             timestamp: serverTimestamp(),
             quantity: increment(1),
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
+            patientThatUsedItem: arrayUnion(patientThatUsedItem),
           },
           { merge: true }
         );
@@ -774,6 +779,7 @@ export async function UseExistingItemOnDb({
             quantity: increment(-1),
             peopleWhoScanned: arrayUnion(auth.currentUser.email),
             typeOfUsage: "used",
+            patientThatUsedItem: arrayUnion(patientThatUsedItem),
           },
           { merge: true }
         );
@@ -1468,7 +1474,7 @@ export async function removeGiftCardFromPatient({
   email,
   company,
 }) {
-  await setDoc(
+  await deleteDoc(
     doc(db, "companys", company, "patients", email),
     {
       giftCardNumber: deleteField(),
@@ -1478,21 +1484,7 @@ export async function removeGiftCardFromPatient({
     },
     { merge: true }
   ).then(async () => {
-    await setDoc(
-      doc(db, "companys", company, "giftCards", giftCardNumber),
-      {
-        firstName: deleteField(),
-        lastName: deleteField(),
-        email: deleteField(),
-        phoneNumber: deleteField(),
-        DOB: deleteField(),
-        dateGiftCardWasAdded: deleteField(),
-        giftCardNumber: deleteField(),
-        totalOnGiftCard: deleteField(),
-        currentAmountOnGiftCard: deleteField(),
-      },
-      { merge: true }
-    );
+    await deleteDoc(doc(db, "companys", company, "giftCards", giftCardNumber));
   });
 }
 //get one patient
