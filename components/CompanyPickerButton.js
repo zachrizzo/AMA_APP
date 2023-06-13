@@ -19,6 +19,7 @@ export default function CompanyButton({
   onPress,
   companyTextShort,
 }) {
+  //
   if (selectedCompany == companyTextLong) {
     return (
       <TouchableOpacity
